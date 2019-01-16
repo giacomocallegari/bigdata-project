@@ -9,5 +9,5 @@ spark = SparkSession.builder\
 path = config.path  # Specify the path of the data
 filename = 'yellow_tripdata_2018-04.csv'  # Specify the name of the file
 
-df = spark.read.csv(path + filename)  # Save the data into a DataFrame
+df = spark.read.csv(path + filename, header=True, inferSchema=True)  # Save the data into a DataFrame
 df.show()  # Show the DataFrame
