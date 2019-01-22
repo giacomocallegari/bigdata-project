@@ -2,6 +2,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import hour, dayofyear, month
 
 from TaxiType import TaxiType
+from fields_detection import init_fields
 import config
 
 spark = SparkSession.builder\
@@ -9,34 +10,22 @@ spark = SparkSession.builder\
     .appName('Tips analysis')\
     .getOrCreate()  # Create a new Spark application
 
-path = config.path  # Specify the path of the data
-filename = 'yellow_tripdata_2018-04.csv'  # Specify the name of the file
-tt = TaxiType.YELLOW  # DEBUG: Type of taxi
 
-# Initialize the correct field names - ATTENTION: field names are represented as the most recent version
-if tt == TaxiType.YELLOW:
-    pu_loc = 'PULocationID'
-    do_loc = 'DOLocationID'
-    do_time = 'tpep_dropoff_datetime'
-    tip = 'tip_amount'
-elif tt == TaxiType.GREEN:
-    pu_loc = 'PULocationID'
-    do_loc = 'DOLocationID'
-    do_time = 'lpep_dropoff_datetime'
-    tip = 'tip_amount'
-elif tt == TaxiType.FHV:
-    pu_loc = 'PULocationID'
-    do_loc = 'DOLocationID'
-    do_time = 'DropOff_datetime'
-    tip = ''  # Tip field not present
-else:
-    pu_loc = ''
-    do_loc = ''
-    do_time = ''
-    tip = ''
+path = config.path  # DEBUG: Path of the data
+filename = 'yellow_tripdata_2018-04.csv'  # DEBUG: Name of the file
+file_type = TaxiType.YELLOW  # DEBUG: Type of taxi
+period = '2018-04'  # DEBUG: Period recorded in data
 
-df = spark.read.csv(path + filename, header=True, inferSchema=True)  # Save the data into a DataFrame
+df = spark.read.csv(path + filename, header=True, inferSchema=True, samplingRatio=0.001)  # Save the data into a DataFrame
+df_columns = df.schema.names
 # df.show()  # Show the DataFrame
+
+# Initialize the correct fields for the queries
+fields = init_fields(file_type, period)
+pu_loc = fields['pu_loc']
+do_loc = fields['do_loc']
+do_time = fields['do_time']
+tip = fields['tip']
 
 
 # Tip amount per pick-up location
