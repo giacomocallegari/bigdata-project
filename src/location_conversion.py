@@ -16,6 +16,7 @@ def __convert_projection(longitude, latitude):
     in_proj = Proj('+init=EPSG:' + epsg_in)  # Input projection
     out_proj = Proj('+init=EPSG:' + epsg_out, preserve_units=True)  # Output projection
 
+    # print(longitude, latitude)
     x, y = transform(in_proj, out_proj, longitude, latitude)  # Convert the coordinates
     return x, y
 
