@@ -9,9 +9,9 @@ class DataReader:
 
     is_a_folder = False
     type = TaxiType.ALL
-    yellow_set = set()
-    green_set = set()
-    fhv_set = set()
+    yellow_set = list()
+    green_set = list()
+    fhv_set = list()
     yellow_template_header = []
     fhv_template_header = []
     green_template_header = []
@@ -60,14 +60,14 @@ class DataReader:
                         current_header = next(reader)
                         if self.__is_yellow(current_header):
                             exist_valid_csv = True
-                            self.yellow_set.add(folder_path + file)
+                            self.yellow_set.append(folder_path + file)
                             exist_valid_csv = True
                         elif self.__is_fhv(current_header):
-                            self.fhv_set.add(folder_path + file)
+                            self.fhv_set.append(folder_path + file)
                             exist_valid_csv = True
                         elif self.__is_green(current_header):
                             exist_valid_csv = True
-                            self.green_set.add(folder_path + file)
+                            self.green_set.append(folder_path + file)
                 except Exception:
                     pass
             if not exist_valid_csv:
@@ -87,9 +87,11 @@ class DataReader:
         with open(os.path.join(os.path.dirname(__file__), "csv-template/green.csv")) as green_template:
             reader = csv.reader(green_template)
             self.green_template_header = next(reader)
+
+    def read_input_params(self):
         try:
             if sys.argv[1] == "-r" and (len(sys.argv) == 3 or len(sys.argv) == 4):
-                self.isAFolder = True
+                self.is_a_folder = True
                 try:
                     folder_path = sys.argv[2]
                     if not folder_path.endswith("/"):
@@ -108,11 +110,11 @@ class DataReader:
                         reader = csv.reader(current_file)
                         header = next(reader)
                         if self.__is_yellow(header):
-                            self.yellow_set.add(input_path)
+                            self.yellow_set.append(input_path)
                         elif self.__is_fhv(header):
-                            self.fhv_set.add(input_path)
+                            self.fhv_set.append(input_path)
                         elif self.__is_green(header):
-                            self.green_set.add(input_path)
+                            self.green_set.append(input_path)
                         else:
                             print("Invalid file selected")
                             sys.exit()

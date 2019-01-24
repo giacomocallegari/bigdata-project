@@ -1,3 +1,4 @@
 src/venv/
 src/__pycache__/
 src/.idea/
+src/analysis/popular-locations/output-data/*
