@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import shapefile
 import csv
 import matplotlib.colors
