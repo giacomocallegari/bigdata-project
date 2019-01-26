@@ -36,7 +36,6 @@ class TaxiArrivals:
 
     def max_arrivals(self, arrivals_by_area_df: DataFrame):
         a = arrivals_by_area_df.agg({"Arrivals": "max"}).collect()[0]
-        print(a["max(Arrivals)"])
         return a["max(Arrivals)"]
 
     def min_arrivals(self, arrivals_by_area_df: DataFrame):

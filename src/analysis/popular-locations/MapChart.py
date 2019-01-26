@@ -38,7 +38,7 @@ class MapChart:
                     reader = csv.reader(file)
                     for row in reader:
                         key, value = row
-                        dict_list[key] = value
+                        dict_list[int(key)] = int(value)
         return dict_list
 
     def create_chart(self):
@@ -51,7 +51,7 @@ class MapChart:
         counter = 1
         for shape in shapefile_reader.shapeRecords():
             poly_data = shape.shape.__geo_interface__
-            axes.add_patch(PolygonPatch(poly_data, fc=str(matplotlib.colors.rgb2hex(cmap(norm(int(results_list.get(str(counter), self.min_value)))))), ec="black", alpha=1, zorder=1))
+            axes.add_patch(PolygonPatch(poly_data, fc=str(matplotlib.colors.rgb2hex(cmap(norm(results_list.get(counter, self.min_value))))), ec="black", alpha=1, zorder=1))
             counter = counter + 1
         axes.axis('scaled')
         sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
