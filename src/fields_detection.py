@@ -3,6 +3,7 @@ from TaxiType import TaxiType
 
 
 # WIP: Insert missing fields if needed in queries
+# Non-existent fields for some period must be added and mapped to the empty string
 
 # Initializes the fields for data of type 'yellow'.
 def __init_yellow(period):

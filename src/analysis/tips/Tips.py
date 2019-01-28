@@ -2,6 +2,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import *
 from fields_detection import init_fields
+from location_conversion import coordinates_to_zone
 import TaxiType
 import DataReader
 import TipsMapChart as MapChart
@@ -36,6 +37,17 @@ class Tips:
     def __max_tips(tips_df: DataFrame):
         max_tip = tips_df.collect()[0]
         return max_tip['avg(' + tip + ')']
+
+    @staticmethod
+    # Converts coordinates to zones.
+    def __convert_df(taxi_df: DataFrame) -> DataFrame:
+        zone_udf = udf(lambda lon, lat: coordinates_to_zone(lon, lat))
+
+        taxi_df = taxi_df.withColumn('pu_loc', zone_udf(taxi_df[pu_lon], taxi_df[pu_lat]))  # Convert pick-up coordinates
+        taxi_df = taxi_df.withColumn('do_loc', zone_udf(taxi_df[do_lon], taxi_df[do_lat]))  # Convert drop-off coordinates
+
+        return taxi_df
+
 
     @staticmethod
     # Finds the tip amount per pick-up location.
@@ -132,6 +144,8 @@ class Tips:
     def compute_yellow(self):
         print("Processing yellow taxi,..")
         yellow_df = self.create_dataframe(self.reader.yellow_set)
+        if pu_loc == '' and do_loc == '':
+            yellow_df = self.__convert_df(yellow_df)
         tips_pu_area_df = self.tips_per_pickup_area(yellow_df)
         max_tip = self.__max_tips(tips_pu_area_df)
         if os.path.isdir(self.yellow_data_path):
@@ -143,6 +157,8 @@ class Tips:
     def compute_green(self):
         print("Processing green taxi,..")
         green_df = self.create_dataframe(self.reader.green_set)
+        if pu_loc == '' and do_loc == '':
+            green_df = self.__convert_df(green_df)
         tips_pu_area_df = self.tips_per_pickup_area(green_df)
         max_tip = self.__max_tips(tips_pu_area_df)
         if os.path.isdir(self.green_data_path):
@@ -157,7 +173,7 @@ aa = Tips(reader)  # Set the reader
 Taxi_type = TaxiType.TaxiType  # Set the file type
 
 # Initialize the correct fields for the queries
-fields = init_fields(aa.reader.type, '2018-04')  # DEBUG
+fields = init_fields(aa.reader.type, '2015-04')  # DEBUG
 pu_loc = fields['pu_loc']
 do_loc = fields['do_loc']
 pu_lon = fields['pu_lon']

@@ -12,33 +12,42 @@ class DataReader:
     yellow_set = list()
     green_set = list()
     fhv_set = list()
-    yellow_template_header = []
-    fhv_template_header = []
-    green_template_header = []
+    yellow_template_headers = []
+    green_template_headers = []
+    fhv_template_headers = []
 
     # Checks if the file is of type yellow.
     def __is_yellow(self, header):
-        if len(header) == len(self.yellow_template_header):
-            for i in range(len(header)):
-                if header[i] != self.yellow_template_header[i]:
-                    return False
-            return True
+        success = False
+        for line in self.yellow_template_headers:  # One line in the file must match
+            if len(header) == len(line):
+                for i in range(len(header)):
+                    success = True
+                    if header[i] != line[i]:  # All characters in the line must match
+                        success = False
+        return success
 
     # Checks if the file is of type green.
     def __is_green(self, header):
-        if len(header) == len(self.green_template_header):
-            for i in range(len(header)):
-                if header[i] != self.green_template_header[i]:
-                    return False
-            return True
+        success = False
+        for line in self.green_template_headers:  # One line in the file must match
+            if len(header) == len(line):
+                for i in range(len(header)):
+                    success = True
+                    if header[i] != line[i]:  # All characters in the line must match
+                        success = False
+        return success
 
     # Checks if the file is of type fhv.
     def __is_fhv(self, header):
-        if len(header) == len(self.fhv_template_header):
-            for i in range(len(header)):
-                if header[i] != self.fhv_template_header[i]:
-                    return False
-            return True
+        success = False
+        for line in self.fhv_template_headers:  # One line in the file must match
+            if len(header) == len(line):
+                for i in range(len(header)):
+                    success = True
+                    if header[i] != line[i]:  # All characters in the line must match
+                        success = False
+        return success
 
     # Sets the type of the files.
     def __set_type_param(self, type_param):
@@ -46,7 +55,7 @@ class DataReader:
             self.type = TaxiType.YELLOW
         elif type_param == "--green" or type_param == "-g":
             self.type = TaxiType.GREEN
-        elif type_param == "--FHV" or type_param == "-f":
+        elif type_param == "--fhv" or type_param == "-f":
             self.type = TaxiType.FHV
         elif type_param == "--all" or type_param == "-a":
             self.type = TaxiType.ALL
@@ -67,12 +76,12 @@ class DataReader:
                             exist_valid_csv = True
                             self.yellow_set.append(folder_path + file)
                             exist_valid_csv = True
-                        elif self.__is_fhv(current_header):
-                            self.fhv_set.append(folder_path + file)
-                            exist_valid_csv = True
                         elif self.__is_green(current_header):
                             exist_valid_csv = True
                             self.green_set.append(folder_path + file)
+                        elif self.__is_fhv(current_header):
+                            self.fhv_set.append(folder_path + file)
+                            exist_valid_csv = True
                 except Exception:
                     pass
             if not exist_valid_csv:
@@ -86,13 +95,16 @@ class DataReader:
     def __init__(self):
         with open(os.path.join(os.path.dirname(__file__), "csv-template/yellow.csv")) as yellow_template:
             reader = csv.reader(yellow_template)
-            self.yellow_template_header = next(reader)
-        with open(os.path.join(os.path.dirname(__file__), "csv-template/fhv.csv")) as fhv_template:
-            reader = csv.reader(fhv_template)
-            self.fhv_template_header = next(reader)
+            for line in reader:
+                self.yellow_template_headers.append(line)
         with open(os.path.join(os.path.dirname(__file__), "csv-template/green.csv")) as green_template:
             reader = csv.reader(green_template)
-            self.green_template_header = next(reader)
+            for line in reader:
+                self.green_template_headers.append(line)
+        with open(os.path.join(os.path.dirname(__file__), "csv-template/fhv.csv")) as fhv_template:
+            reader = csv.reader(fhv_template)
+            for line in reader:
+                self.fhv_template_headers.append(line)
 
     # Reads the input parameters.
     def read_input_params(self):
@@ -118,10 +130,10 @@ class DataReader:
                         header = next(reader)
                         if self.__is_yellow(header):
                             self.yellow_set.append(input_path)
-                        elif self.__is_fhv(header):
-                            self.fhv_set.append(input_path)
                         elif self.__is_green(header):
                             self.green_set.append(input_path)
+                        elif self.__is_fhv(header):
+                            self.fhv_set.append(input_path)
                         else:
                             print("Invalid file selected")
                             sys.exit()
