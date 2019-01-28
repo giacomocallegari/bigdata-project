@@ -74,20 +74,32 @@ def __init_green(period):
 
     # 2013-10 - 2014-10
     if '2013-10' <= period <= '2014-10':
-        fields['pu_loc'] = ''  # Coordinates
-        fields['do_loc'] = ''  # Coordinates
+        fields['pu_lon'] = 'Pickup_longitude'
+        fields['pu_lat'] = 'Pickup_latitude'
+        fields['do_lon'] = 'Dropoff_longitude'
+        fields['do_lat'] = 'Dropoff_latitude'
+        fields['pu_loc'] = ''
+        fields['do_loc'] = ''
         fields['do_time'] = 'Lpep_dropoff_datetime'
         fields['tip'] = 'Tip_amount'
 
     # 2015-01 - 2016-04
     if '2015-01' <= period <= '2016-04':
-        fields['pu_loc'] = ''  # Coordinates
-        fields['do_loc'] = ''  # Coordinates
+        fields['pu_lon'] = 'Pickup_longitude'
+        fields['pu_lat'] = 'Pickup_latitude'
+        fields['do_lon'] = 'Dropoff_longitude'
+        fields['do_lat'] = 'Dropoff_latitude'
+        fields['pu_loc'] = ''
+        fields['do_loc'] = ''
         fields['do_time'] = 'Lpep_dropoff_datetime'
         fields['tip'] = 'Tip_amount'
 
     # 2016-07 - 2018-04
     if '2016-07' <= period <= '2018-04':
+        fields['pu_lon'] = ''
+        fields['pu_lat'] = ''
+        fields['do_lon'] = ''
+        fields['do_lat'] = ''
         fields['pu_loc'] = 'PULocationID'
         fields['do_loc'] = 'DOLocationID'
         fields['do_time'] = 'lpep_dropoff_datetime'
@@ -103,20 +115,36 @@ def __init_fhv(period):
 
     # 2015-01 - 2016-10
     if '2015-01' <= period <= '2016-10':
+        fields['pu_lon'] = ''
+        fields['pu_lat'] = ''
+        fields['do_lon'] = ''
+        fields['do_lat'] = ''
         fields['pu_loc'] = 'locationID'
         fields['do_loc'] = 'locationID'
+        fields['do_time'] = ''
+        fields['tip'] = ''
 
     # 2017-01 - 2017-04
     if '2017-01' <= period <= '2017-04':
+        fields['pu_lon'] = ''
+        fields['pu_lat'] = ''
+        fields['do_lon'] = ''
+        fields['do_lat'] = ''
         fields['pu_loc'] = 'PULocationID'
         fields['do_loc'] = 'DOLocationID'
         fields['do_time'] = 'DropOff_datetime'
+        fields['tip'] = ''
 
     # 2017-07 - 2018-04
     if '2017-07' <= period <= '2018-04':
+        fields['pu_lon'] = ''
+        fields['pu_lat'] = ''
+        fields['do_lon'] = ''
+        fields['do_lat'] = ''
         fields['pu_loc'] = 'PULocationID'
         fields['do_loc'] = 'DOLocationID'
         fields['do_time'] = 'DropOff_datetime'
+        fields['tip'] = ''
 
     return fields
 

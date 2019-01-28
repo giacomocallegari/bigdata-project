@@ -15,9 +15,9 @@ class Tips:
         .appName("max-tips") \
         .getOrCreate()
 
-    yellow_data_path = os.path.join(os.path.dirname(__file__), "output-data/yellow-arrivals")
-    green_data_path = os.path.join(os.path.dirname(__file__), "output-data/green-arrivals")
-    fhv_data_path = os.path.join(os.path.dirname(__file__), "output-data/fhv-arrivals")
+    yellow_data_path = os.path.join(os.path.dirname(__file__), "output-data/yellow-tips")
+    green_data_path = os.path.join(os.path.dirname(__file__), "output-data/green-tips")
+    fhv_data_path = os.path.join(os.path.dirname(__file__), "output-data/fhv-tips")
     shp_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.shp")
     dbf_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.dbf")
 
@@ -139,29 +139,16 @@ class Tips:
         tips_pu_area_df.write.csv(self.yellow_data_path, header=False)
         self.yellow_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.yellow_data_path, 0, max_tip, "Yellow Taxi Tips")
 
-    '''
     # Analyzes data of type green.
     def compute_green(self):
-        print("Processing green taxi...")
+        print("Processing green taxi,..")
         green_df = self.create_dataframe(self.reader.green_set)
-        arrivals_by_area = self.get_arrivals_by_area(green_df)
-        max_arr = self.max_arrivals(arrivals_by_area)
+        tips_pu_area_df = self.tips_per_pickup_area(green_df)
+        max_tip = self.__max_tips(tips_pu_area_df)
         if os.path.isdir(self.green_data_path):
             shutil.rmtree(self.green_data_path)
-        arrivals_by_area.write.csv(self.green_data_path, header=False)
-        self.green_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.green_data_path, 0, max_arr, "Green Taxi Arrivals")
-
-    # Analyzes data of type fhv.
-    def compute_fhv(self):
-        print("Processing fhv taxi...")
-        fhv_df = self.create_dataframe(self.reader.fhv_set)
-        arrivals_by_area = self.get_arrivals_by_area(fhv_df)
-        max_arr = self.max_arrivals(arrivals_by_area)
-        if os.path.isdir(self.fhv_data_path):
-            shutil.rmtree(self.fhv_data_path)
-        arrivals_by_area.write.csv(self.fhv_data_path, header=False)
-        self.fhv_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.fhv_data_path, 0, max_arr, "Fhv Taxi Arrivals")
-    '''
+        tips_pu_area_df.write.csv(self.green_data_path, header=False)
+        self.green_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.green_data_path, 0, max_tip, "Green Taxi Tips")
 
 
 reader = DataReader.DataReader()  # Initialize the DataReader
@@ -187,14 +174,13 @@ if aa.reader.type == Taxi_type.ALL:
     if len(aa.reader.green_set) != 0:
         aa.compute_green()
     if len(reader.fhv_set) != 0:
-        aa.compute_fhv()
+        print("FHV type not supported")
     aa.show_charts()
 elif reader.type == Taxi_type.YELLOW:
     aa.compute_yellow()
     aa.yellow_chart.create_chart()
 elif reader.type == Taxi_type.FHV:
-    aa.compute_fhv()
-    aa.fhv_chart.create_chart()
+    print("FHV type not supported")
 elif reader.type == Taxi_type.GREEN:
     aa.compute_green()
     aa.green_chart.create_chart()
