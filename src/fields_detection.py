@@ -1,10 +1,8 @@
 from TaxiType import TaxiType
-# from location_conversion import coordinates_to_zone as ctz
 # import config
 
 
 # WIP: Insert missing fields if needed in queries
-# WIP: Coordinate conversion not managed yet
 
 # Initializes the fields for data of type 'yellow'.
 def __init_yellow(period):

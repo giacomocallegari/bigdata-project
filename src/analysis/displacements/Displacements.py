@@ -78,6 +78,7 @@ class Displacement:
                        (col("DOLocationID") < 264) &
                        (col("PULocationID") != col("DOLocationID"))).groupBy("PULocationID", "DOLocationID").count().orderBy(desc("count"))
         return displacements.filter(col("PULocationID") < col("DOLocationID")), displacements.filter(col("PULocationID") > col("DOLocationID"))
+
     def show_charts(self):
         # Creation of chart cuncurrently
         if len(self.reader.yellow_set) != 0 and len(self.reader.green_set) != 0 and len(self.reader.fhv_set) != 0:

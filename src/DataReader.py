@@ -16,6 +16,7 @@ class DataReader:
     fhv_template_header = []
     green_template_header = []
 
+    # Checks if the file is of type yellow.
     def __is_yellow(self, header):
         if len(header) == len(self.yellow_template_header):
             for i in range(len(header)):
@@ -23,13 +24,7 @@ class DataReader:
                     return False
             return True
 
-    def __is_fhv(self, header):
-        if len(header) == len(self.fhv_template_header):
-            for i in range(len(header)):
-                if header[i] != self.fhv_template_header[i]:
-                    return False
-            return True
-
+    # Checks if the file is of type green.
     def __is_green(self, header):
         if len(header) == len(self.green_template_header):
             for i in range(len(header)):
@@ -37,6 +32,15 @@ class DataReader:
                     return False
             return True
 
+    # Checks if the file is of type fhv.
+    def __is_fhv(self, header):
+        if len(header) == len(self.fhv_template_header):
+            for i in range(len(header)):
+                if header[i] != self.fhv_template_header[i]:
+                    return False
+            return True
+
+    # Sets the type of the files.
     def __set_type_param(self, type_param):
         if type_param == "--yellow" or type_param == "-y":
             self.type = TaxiType.YELLOW
@@ -50,6 +54,7 @@ class DataReader:
             print("Invalid Type Parameter")
             sys.exit()
 
+    # Checks if the path is valid and if it contains csv files.
     def __filter_csv(self, folder_path):
         try:
             exist_valid_csv = False
@@ -77,6 +82,7 @@ class DataReader:
             print("No such file or directory for the path specified")
             sys.exit()
 
+    # Initializes the header templates for the files.
     def __init__(self):
         with open(os.path.join(os.path.dirname(__file__), "csv-template/yellow.csv")) as yellow_template:
             reader = csv.reader(yellow_template)
@@ -88,9 +94,10 @@ class DataReader:
             reader = csv.reader(green_template)
             self.green_template_header = next(reader)
 
+    # Reads the input parameters.
     def read_input_params(self):
         try:
-            if sys.argv[1] == "-r" and (len(sys.argv) == 3 or len(sys.argv) == 4):
+            if sys.argv[1] == "-r" and (len(sys.argv) == 3 or len(sys.argv) == 4):  # Read folder
                 self.is_a_folder = True
                 try:
                     folder_path = sys.argv[2]
@@ -102,7 +109,7 @@ class DataReader:
                 except IndexError:
                     print("No folder path specified")
                     sys.exit()
-            elif len(sys.argv) == 2 or len(sys.argv) == 3:
+            elif len(sys.argv) == 2 or len(sys.argv) == 3:  # Read file
                 self.is_a_folder = False
                 input_path = sys.argv[1]
                 try:

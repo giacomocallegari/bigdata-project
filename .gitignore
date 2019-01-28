@@ -3,3 +3,5 @@ src/__pycache__/
 src/.idea/
 src/analysis/popular-locations/output-data/*
 src/analysis/popular-locations/__pycache__/
+src/analysis/tips/output-data/*
+src/analysis/tips/__pycache__/
