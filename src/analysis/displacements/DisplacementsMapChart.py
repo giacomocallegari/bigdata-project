@@ -6,11 +6,12 @@ import matplotlib.pyplot as plt
 from descartes import PolygonPatch
 from shapely import geometry
 import os
+import math
 
 
 class DisplacementsMapChart:
     # Change this value to set the number of arrow visualized
-    displacement_number = 200
+    displacement_number = 3000
 
     def __init__(self, dbf_path = "", shp_path = "", folder_income_path="", folder_outcome_path="", title=""):
         self.title = title
@@ -65,7 +66,12 @@ class DisplacementsMapChart:
         _, _, max_outcome_num = outcomes_records[self.displacement_number - 1]
         norm = matplotlib.colors.Normalize(0, max(max_income_num, max_outcome_num))
         cmap = plt.cm.OrRd
-        for income_record, outcome_record in zip(incomes_records, outcomes_records):
+        index = 0
+        for income_record, outcome_record in zip(reversed(incomes_records), reversed(outcomes_records)):
+            _, percentage = math.modf((index/self.displacement_number) * 100)
+            percentage = int(percentage)
+            print("\rBuilding map - chart -> " + str(percentage) + "%", end="")
+            index += 1
             in_departure, in_arrival, in_count = income_record
             out_departure, out_arrival, out_count = outcome_record
             center_in_from_x, center_in_from_y = centroid_list.get(in_departure)
@@ -88,6 +94,7 @@ class DisplacementsMapChart:
                           width=100,
                           alpha=0.5,
                           length_includes_head=True)
+        print("\rBuilding map - chart -> 100%", end="")
         sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
         sm.set_array([])
         figure.colorbar(sm)
