@@ -2,11 +2,5 @@
 src/venv/
 src/__pycache__/
 src/.idea/
-src/analysis/popular-locations/output-data/*
-src/analysis/popular-locations/__pycache__/
-src/analysis/displacements/output-data/*
-src/analysis/displacements/__pycache__/
-src/analysis/tips/output-data/*
-src/analysis/tips/__pycache__/
-src/analysis/passengers/output-data/*
-src/analysis/passengers/__pycache__/
+**/output-data/*
+**/__pycache__/
