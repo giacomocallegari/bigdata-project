@@ -17,7 +17,6 @@ class TipsDepartures:
 
     yellow_data_path = os.path.join(os.path.dirname(__file__), "output-data/yellow-tips-departures")
     green_data_path = os.path.join(os.path.dirname(__file__), "output-data/green-tips-departures")
-    fhv_data_path = os.path.join(os.path.dirname(__file__), "output-data/fhv-tips-departures")
     shp_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.shp")
     dbf_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.dbf")
 

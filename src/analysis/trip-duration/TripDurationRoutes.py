@@ -3,20 +3,21 @@ from pyspark.sql import DataFrame
 from fields_detection import init_fields
 import TaxiType
 import DataReader
-import Passengers
-import PassengersMapChart as MapChart
+import TripDuration
+import TripDurationMapChart as MapChart
 import os
 import shutil
 
 
-class PassengersDepartures:
+class TripDurationRoutes:
     spark = SparkSession \
         .builder \
-        .appName("max-passengers-departures") \
+        .appName("max-trip-duration-routes") \
         .getOrCreate()
 
-    yellow_data_path = os.path.join(os.path.dirname(__file__), "output-data/yellow-passengers-departures")
-    green_data_path = os.path.join(os.path.dirname(__file__), "output-data/green-passengers-departures")
+    yellow_data_path = os.path.join(os.path.dirname(__file__), "output-data/yellow-trip-duration-routes")
+    green_data_path = os.path.join(os.path.dirname(__file__), "output-data/green-trip-duration-routes")
+    fhv_data_path = os.path.join(os.path.dirname(__file__), "output-data/fhv-trip-duration-routes")
     shp_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.shp")
     dbf_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.dbf")
 
@@ -99,31 +100,44 @@ class PassengersDepartures:
         print("Processing yellow taxi,..")
         yellow_df = self.create_dataframe(self.reader.yellow_set)
         if fields['pu_loc'] == '' and fields['do_loc'] == '':
-            yellow_df = Passengers.convert_df(yellow_df, fields)
-        passengers_pu_area_df = Passengers.passengers_per_pickup_area(yellow_df, fields)
-        max_passenger = Passengers.max_passengers(passengers_pu_area_df, fields)
+            yellow_df = TripDuration.convert_df(yellow_df, fields)
+        trip_duration_route_df = TripDuration.duration_per_route(yellow_df, fields)
+        max_duration = TripDuration.max_duration(trip_duration_route_df, fields)
         if os.path.isdir(self.yellow_data_path):
             shutil.rmtree(self.yellow_data_path)
-        passengers_pu_area_df.write.csv(self.yellow_data_path, header=False)
-        self.yellow_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.yellow_data_path, 0, max_passenger, "Yellow Taxi Passengers - Departure Zone")
+        trip_duration_route_df.write.csv(self.yellow_data_path, header=False)
+        self.yellow_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.yellow_data_path, 0, max_duration, "Yellow Taxi Trip Duration - Routes")
 
     # Analyzes data of type green.
     def compute_green(self):
         print("Processing green taxi,..")
         green_df = self.create_dataframe(self.reader.green_set)
         if fields['pu_loc'] == '' and fields['do_loc'] == '':
-            green_df = Passengers.convert_df(green_df, fields)
-        passengers_pu_area_df = Passengers.passengers_per_pickup_area(green_df, fields)
-        max_passenger = Passengers.max_passengers(passengers_pu_area_df, fields)
+            green_df = TripDuration.convert_df(green_df, fields)
+        trip_duration_route_df = TripDuration.duration_per_route(green_df, fields)
+        max_duration = TripDuration.max_duration(trip_duration_route_df, fields)
         if os.path.isdir(self.green_data_path):
             shutil.rmtree(self.green_data_path)
-        passengers_pu_area_df.write.csv(self.green_data_path, header=False)
-        self.green_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.green_data_path, 0, max_passenger, "Green Taxi Passengers - Departure Zone")
+        trip_duration_route_df.write.csv(self.green_data_path, header=False)
+        self.green_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.green_data_path, 0, max_duration, "Green Taxi Trip Duration - Routes")
+
+    # Analyzes data of type fhv.
+    def compute_fhv(self):
+        print("Processing fhv taxi,..")
+        fhv_df = self.create_dataframe(self.reader.fhv_set)
+        if fields['pu_loc'] == '' and fields['do_loc'] == '':
+            fhv_df = TripDuration.convert_df(fhv_df, fields)
+        trip_duration_route_df = TripDuration.duration_per_route(fhv_df, fields)
+        max_duration = TripDuration.max_duration(trip_duration_route_df, fields)
+        if os.path.isdir(self.fhv_data_path):
+            shutil.rmtree(self.fhv_data_path)
+        trip_duration_route_df.write.csv(self.fhv_data_path, header=False)
+        self.fhv_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.fhv_data_path, 0, max_duration, "FHV Taxi Trip Duration - Routes")
 
 
 reader = DataReader.DataReader()  # Initialize the DataReader
 reader.read_input_params()  # Read the input parameters
-aa = PassengersDepartures(reader)  # Set the reader
+aa = TripDurationRoutes(reader)  # Set the reader
 Taxi_type = TaxiType.TaxiType  # Set the file type
 
 # Initialize the correct fields for the queries
@@ -136,13 +150,14 @@ if aa.reader.type == Taxi_type.ALL:
     if len(aa.reader.green_set) != 0:
         aa.compute_green()
     if len(reader.fhv_set) != 0:
-        print("FHV type not supported")
+        aa.compute_fhv()
     aa.show_charts()
 elif reader.type == Taxi_type.YELLOW:
     aa.compute_yellow()
     aa.yellow_chart.create_chart()
-elif reader.type == Taxi_type.FHV:
-    print("FHV type not supported")
 elif reader.type == Taxi_type.GREEN:
     aa.compute_green()
     aa.green_chart.create_chart()
+elif reader.type == Taxi_type.FHV:
+    aa.compute_fhv()
+    aa.yellow_chart.create_chart()

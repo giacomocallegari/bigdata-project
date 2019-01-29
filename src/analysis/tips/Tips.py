@@ -4,11 +4,6 @@ from typing import Dict
 from location_conversion import coordinates_to_zone
 
 
-# Finds the maximum tip in an ordered DataFrame.
-def max_tips(tips_df: DataFrame, fields: Dict[str, str]):
-    max_tip = tips_df.collect()[0]
-    return max_tip['avg(' + fields['tip'] + ')']
-
 # Converts coordinates to zones.
 def convert_df(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
     zone_udf = udf(lambda lon, lat: coordinates_to_zone(lon, lat))
@@ -17,6 +12,11 @@ def convert_df(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
     taxi_df = taxi_df.withColumn('do_loc', zone_udf(taxi_df[fields['do_lon']], taxi_df[fields['do_lat']]))  # Convert drop-off coordinates
 
     return taxi_df
+
+# Finds the maximum tip in an ordered, aggregated DataFrame.
+def max_tips(tips_df: DataFrame, fields: Dict[str, str]):
+    max_tip = tips_df.collect()[0]
+    return max_tip['avg(' + fields['tip'] + ')']
 
 # Finds the tip amount per pick-up location.
 def tips_per_pickup_area(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:

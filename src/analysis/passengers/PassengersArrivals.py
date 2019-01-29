@@ -17,7 +17,6 @@ class PassengersArrivals:
 
     yellow_data_path = os.path.join(os.path.dirname(__file__), "output-data/yellow-passengers-arrivals")
     green_data_path = os.path.join(os.path.dirname(__file__), "output-data/green-passengers-arrivals")
-    fhv_data_path = os.path.join(os.path.dirname(__file__), "output-data/fhv-passengers-arrivals")
     shp_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.shp")
     dbf_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.dbf")
 
