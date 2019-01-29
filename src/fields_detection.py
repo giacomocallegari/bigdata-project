@@ -20,6 +20,7 @@ def __init_yellow(period):
         fields['do_loc'] = ''
         fields['do_time'] = 'Trip_Dropoff_Datetime'
         fields['tip'] = 'Tip_Amt'
+        fields['passengers'] = 'Passenger_Count'
 
     # 2010-01 - 2013-10
     if '2010-01' <= period <= '2013-10':
@@ -31,6 +32,7 @@ def __init_yellow(period):
         fields['do_loc'] = ''
         fields['do_time'] = 'dropoff_datetime'
         fields['tip'] = 'tip_amount'
+        fields['passengers'] = 'passenger_count'
 
     # 2014-01 - 2014-10
     if '2014-01' <= period <= '2014-10':
@@ -42,6 +44,7 @@ def __init_yellow(period):
         fields['do_loc'] = ''
         fields['do_time'] = 'dropoff_datetime'
         fields['tip'] = 'tip_amount'
+        fields['passengers'] = 'passenger_count'
 
     # 2015-01 - 2016-04
     if '2015-01' <= period <= '2016-04':
@@ -53,6 +56,7 @@ def __init_yellow(period):
         fields['do_loc'] = ''
         fields['do_time'] = 'tpep_dropoff_datetime'
         fields['tip'] = 'tip_amount'
+        fields['passengers'] = 'passenger_count'
 
     # 2016-07 - 2018-04
     if '2016-07' <= period <= '2018-04':
@@ -64,6 +68,7 @@ def __init_yellow(period):
         fields['do_loc'] = 'DOLocationID'
         fields['do_time'] = 'tpep_dropoff_datetime'
         fields['tip'] = 'tip_amount'
+        fields['passengers'] = 'passenger_count'
 
     return fields
 
@@ -83,6 +88,7 @@ def __init_green(period):
         fields['do_loc'] = ''
         fields['do_time'] = 'Lpep_dropoff_datetime'
         fields['tip'] = 'Tip_amount'
+        fields['passengers'] = 'Passenger_count'
 
     # 2015-01 - 2016-04
     if '2015-01' <= period <= '2016-04':
@@ -94,6 +100,7 @@ def __init_green(period):
         fields['do_loc'] = ''
         fields['do_time'] = 'Lpep_dropoff_datetime'
         fields['tip'] = 'Tip_amount'
+        fields['passengers'] = 'Passenger_count'
 
     # 2016-07 - 2018-04
     if '2016-07' <= period <= '2018-04':
@@ -105,6 +112,7 @@ def __init_green(period):
         fields['do_loc'] = 'DOLocationID'
         fields['do_time'] = 'lpep_dropoff_datetime'
         fields['tip'] = 'tip_amount'
+        fields['passengers'] = 'passenger_count'
 
     return fields
 

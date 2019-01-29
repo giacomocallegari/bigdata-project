@@ -8,3 +8,5 @@ src/analysis/displacements/output-data/*
 src/analysis/displacements/__pycache__/
 src/analysis/tips/output-data/*
 src/analysis/tips/__pycache__/
+src/analysis/passengers/output-data/*
+src/analysis/passengers/__pycache__/
