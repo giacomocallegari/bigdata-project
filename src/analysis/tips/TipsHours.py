@@ -126,7 +126,7 @@ aa = TipsHours(reader)  # Set the reader
 Taxi_type = TaxiType.TaxiType  # Set the file type
 
 # Initialize the correct fields for the queries
-fields = init_fields(aa.reader.type, '2018-04')  # DEBUG: period
+fields = init_fields(aa.reader.type, aa.reader.period)
 
 # Perform the analysis for the desired types
 if aa.reader.type == Taxi_type.ALL:

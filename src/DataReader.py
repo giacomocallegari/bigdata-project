@@ -9,6 +9,7 @@ class DataReader:
 
     is_a_folder = False
     type = TaxiType.ALL
+    period = '0000-00'
     yellow_set = list()
     green_set = list()
     fhv_set = list()
@@ -63,6 +64,12 @@ class DataReader:
             print("Invalid Type Parameter")
             sys.exit()
 
+    # Sets the period that the file represents.
+    def __set_period_param(self, path):
+        filename_w_ext = os.path.basename(path)
+        filename = os.path.splitext(filename_w_ext)[0]
+        self.period = filename[-7:]  # Get the year and month from the last 7 characters of name of the file
+
     # Checks if the path is valid and if it contains csv files.
     def __filter_csv(self, folder_path):
         try:
@@ -75,13 +82,12 @@ class DataReader:
                         if self.__is_yellow(current_header):
                             exist_valid_csv = True
                             self.yellow_set.append(folder_path + file)
-                            exist_valid_csv = True
                         elif self.__is_green(current_header):
                             exist_valid_csv = True
                             self.green_set.append(folder_path + file)
                         elif self.__is_fhv(current_header):
-                            self.fhv_set.append(folder_path + file)
                             exist_valid_csv = True
+                            self.fhv_set.append(folder_path + file)
                 except Exception:
                     pass
             if not exist_valid_csv:
@@ -124,6 +130,7 @@ class DataReader:
             elif len(sys.argv) == 2 or len(sys.argv) == 3:  # Read file
                 self.is_a_folder = False
                 input_path = sys.argv[1]
+                self.__set_period_param(input_path)
                 try:
                     with open(input_path) as current_file:
                         reader = csv.reader(current_file)
@@ -149,3 +156,4 @@ class DataReader:
         except IndexError:
             print("You have to specify a folder/file directory")
             sys.exit()
+
