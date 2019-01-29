@@ -13,7 +13,7 @@ import shutil
 class Tips:
     spark = SparkSession \
         .builder \
-        .appName("max-tips") \
+        .appName("max-tips-arrivals") \
         .getOrCreate()
 
     yellow_data_path = os.path.join(os.path.dirname(__file__), "output-data/yellow-tips")
@@ -48,32 +48,26 @@ class Tips:
 
         return taxi_df
 
-
-    @staticmethod
-    # Finds the tip amount per pick-up location.
-    def tips_per_pickup_area(taxi_df: DataFrame) -> DataFrame:
-        return taxi_df.groupBy(pu_loc).agg(avg(tip)).orderBy('avg(' + tip + ')', ascending=False)
-
-    '''
     @staticmethod
     # Finds the tip amount per drop-off location.
     def tips_per_dropoff_area(taxi_df: DataFrame) -> DataFrame:
-        return taxi_df.groupBy(do_loc).avg(tip).orderBy('avg(' + tip + ')', ascending=False)
+        return taxi_df.groupBy(do_loc).agg(avg(tip)).orderBy('avg(' + tip + ')', ascending=False)
 
+    '''
     @staticmethod
     # Finds the tip amount per hour of the day.
     def tips_per_hour(taxi_df: DataFrame) -> DataFrame:
-        return taxi_df.groupBy(hour(do_time).alias('hour_of_day')).avg(tip).orderBy('avg(' + tip + ')', ascending=False)
+        return taxi_df.groupBy(hour(do_time).alias('hour_of_day')).agg(avg(tip)).orderBy('avg(' + tip + ')', ascending=False)
 
     @staticmethod
     # Finds the tip amount per day of the year.
     def tips_per_day(taxi_df: DataFrame) -> DataFrame:
-        return taxi_df.groupBy(dayofyear(do_time).alias('day_of_year')).avg(tip).orderBy('avg(' + tip + ')', ascending=False)
+        return taxi_df.groupBy(dayofyear(do_time).alias('day_of_year')).agg(avg(tip)).orderBy('avg(' + tip + ')', ascending=False)
 
     @staticmethod
     # Finds the tip amount per month of the year.
     def tips_per_month(taxi_df: DataFrame) -> DataFrame:
-        taxi_df.groupBy(month(do_time).alias('month_of_year')).avg(tip).orderBy('avg(' + tip + ')', ascending=False)
+        taxi_df.groupBy(month(do_time).alias('month_of_year')).agg(avg(tip)).orderBy('avg(' + tip + ')', ascending=False)
     '''
 
     # Creates a chart to visualize the results of the analysis.
@@ -146,12 +140,12 @@ class Tips:
         yellow_df = self.create_dataframe(self.reader.yellow_set)
         if pu_loc == '' and do_loc == '':
             yellow_df = self.__convert_df(yellow_df)
-        tips_pu_area_df = self.tips_per_pickup_area(yellow_df)
-        max_tip = self.__max_tips(tips_pu_area_df)
+        tips_do_area_df = self.tips_per_dropoff_area(yellow_df)
+        max_tip = self.__max_tips(tips_do_area_df)
         if os.path.isdir(self.yellow_data_path):
             shutil.rmtree(self.yellow_data_path)
-        tips_pu_area_df.write.csv(self.yellow_data_path, header=False)
-        self.yellow_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.yellow_data_path, 0, max_tip, "Yellow Taxi Tips")
+        tips_do_area_df.write.csv(self.yellow_data_path, header=False)
+        self.yellow_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.yellow_data_path, 0, max_tip, "Yellow Taxi Tips - Arrival Zone")
 
     # Analyzes data of type green.
     def compute_green(self):
@@ -159,12 +153,12 @@ class Tips:
         green_df = self.create_dataframe(self.reader.green_set)
         if pu_loc == '' and do_loc == '':
             green_df = self.__convert_df(green_df)
-        tips_pu_area_df = self.tips_per_pickup_area(green_df)
-        max_tip = self.__max_tips(tips_pu_area_df)
+        tips_do_area_df = self.tips_per_dropoff_area(green_df)
+        max_tip = self.__max_tips(tips_do_area_df)
         if os.path.isdir(self.green_data_path):
             shutil.rmtree(self.green_data_path)
-        tips_pu_area_df.write.csv(self.green_data_path, header=False)
-        self.green_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.green_data_path, 0, max_tip, "Green Taxi Tips")
+        tips_do_area_df.write.csv(self.green_data_path, header=False)
+        self.green_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.green_data_path, 0, max_tip, "Green Taxi Tips - Arrival Zone")
 
 
 reader = DataReader.DataReader()  # Initialize the DataReader
@@ -173,14 +167,13 @@ aa = Tips(reader)  # Set the reader
 Taxi_type = TaxiType.TaxiType  # Set the file type
 
 # Initialize the correct fields for the queries
-fields = init_fields(aa.reader.type, '2015-04')  # DEBUG
+fields = init_fields(aa.reader.type, '2018-04')  # DEBUG
 pu_loc = fields['pu_loc']
 do_loc = fields['do_loc']
 pu_lon = fields['pu_lon']
 pu_lat = fields['pu_lat']
 do_lon = fields['do_lon']
 do_lat = fields['do_lat']
-do_time = fields['do_time']
 tip = fields['tip']
 
 # Perform the analysis for the desired types
