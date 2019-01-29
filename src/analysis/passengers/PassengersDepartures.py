@@ -141,8 +141,8 @@ if aa.reader.type == Taxi_type.ALL:
 elif reader.type == Taxi_type.YELLOW:
     aa.compute_yellow()
     aa.yellow_chart.create_chart()
-elif reader.type == Taxi_type.FHV:
-    print("FHV type not supported")
 elif reader.type == Taxi_type.GREEN:
     aa.compute_green()
     aa.green_chart.create_chart()
+elif reader.type == Taxi_type.FHV:
+    print("FHV type not supported")

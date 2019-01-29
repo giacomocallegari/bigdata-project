@@ -9,14 +9,14 @@ import os
 import shutil
 
 
-class PassengersArrivals:
+class PassengersDays:
     spark = SparkSession \
         .builder \
-        .appName("max-passengers-arrivals") \
+        .appName("max-passengers-days") \
         .getOrCreate()
 
-    yellow_data_path = os.path.join(os.path.dirname(__file__), "output-data/yellow-passengers-arrivals")
-    green_data_path = os.path.join(os.path.dirname(__file__), "output-data/green-passengers-arrivals")
+    yellow_data_path = os.path.join(os.path.dirname(__file__), "output-data/yellow-passengers-days")
+    green_data_path = os.path.join(os.path.dirname(__file__), "output-data/green-passengers-days")
     shp_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.shp")
     dbf_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.dbf")
 
@@ -100,12 +100,12 @@ class PassengersArrivals:
         yellow_df = self.create_dataframe(self.reader.yellow_set)
         if fields['pu_loc'] == '' and fields['do_loc'] == '':
             yellow_df = Passengers.convert_df(yellow_df, fields)
-        passengers_do_area_df = Passengers.passengers_per_dropoff_area(yellow_df, fields)
-        max_passenger = Passengers.max_passengers(passengers_do_area_df, fields)
+        passengers_day_df = Passengers.passengers_per_day(yellow_df, fields)
+        max_passengers = Passengers.max_passengers(passengers_day_df, fields)
         if os.path.isdir(self.yellow_data_path):
             shutil.rmtree(self.yellow_data_path)
-        passengers_do_area_df.write.csv(self.yellow_data_path, header=False)
-        self.yellow_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.yellow_data_path, 0, max_passenger, "Yellow Taxi Passengers - Departure Zone")
+        passengers_day_df.write.csv(self.yellow_data_path, header=False)
+        self.yellow_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.yellow_data_path, 0, max_passengers, "Yellow Taxi Passengers - Day of the day")
 
     # Analyzes data of type green.
     def compute_green(self):
@@ -113,17 +113,17 @@ class PassengersArrivals:
         green_df = self.create_dataframe(self.reader.green_set)
         if fields['pu_loc'] == '' and fields['do_loc'] == '':
             green_df = Passengers.convert_df(green_df, fields)
-        passengers_do_area_df = Passengers.passengers_per_dropoff_area(green_df, fields)
-        max_passenger = Passengers.max_passengers(passengers_do_area_df, fields)
+        passengers_day_df = Passengers.passengers_per_day(green_df, fields)
+        max_passengers = Passengers.max_passengers(passengers_day_df, fields)
         if os.path.isdir(self.green_data_path):
             shutil.rmtree(self.green_data_path)
-        passengers_do_area_df.write.csv(self.green_data_path, header=False)
-        self.green_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.green_data_path, 0, max_passenger, "Green Taxi Passengers - Departure Zone")
+        passengers_day_df.write.csv(self.green_data_path, header=False)
+        self.green_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.green_data_path, 0, max_passengers, "Green Taxi Passengers - Day of the day")
 
 
 reader = DataReader.DataReader()  # Initialize the DataReader
 reader.read_input_params()  # Read the input parameters
-aa = PassengersArrivals(reader)  # Set the reader
+aa = PassengersDays(reader)  # Set the reader
 Taxi_type = TaxiType.TaxiType  # Set the file type
 
 # Initialize the correct fields for the queries
