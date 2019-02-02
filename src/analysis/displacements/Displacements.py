@@ -76,7 +76,7 @@ class Displacement:
                        (col("PULocationID") < 264) &
                        (col("DOLocationID") != "") &
                        (col("DOLocationID") < 264) &
-                       (col("PULocationID") != col("DOLocationID"))).groupBy("PULocationID", "DOLocationID").count().orderBy(desc("count"))
+                       (col("PULocationID") != col("DOLocationID"))).groupBy("PULocationID", "DOLocationID").count().orderBy(desc("count")).persist()
         return displacements.filter(col("PULocationID") < col("DOLocationID")), displacements.filter(col("PULocationID") > col("DOLocationID"))
 
     def show_charts(self):

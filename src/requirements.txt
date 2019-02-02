@@ -4,3 +4,4 @@ numpy==1.16.0
 pyspark==2.4.0
 pyshp==2.0.1
 shapely==1.6.4post2
+pyproj==1.9.6

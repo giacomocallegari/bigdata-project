@@ -108,7 +108,7 @@ class TaxiArrivals:
     def compute_yellow(self):
         print("Processing yellow taxi,..")
         yellow_df = self.create_dataframe(self.reader.yellow_set)
-        arrivals_by_area = self.get_arrivals_by_area(yellow_df)
+        arrivals_by_area = self.get_arrivals_by_area(yellow_df).persist()
         max_arr = self.max_arrivals(arrivals_by_area)
         if os.path.isdir(self.yellow_data_path):
             shutil.rmtree(self.yellow_data_path)
@@ -118,7 +118,7 @@ class TaxiArrivals:
     def compute_green(self):
         print("Processing green taxi...")
         green_df = self.create_dataframe(self.reader.green_set)
-        arrivals_by_area = self.get_arrivals_by_area(green_df)
+        arrivals_by_area = self.get_arrivals_by_area(green_df).persist()
         max_arr = self.max_arrivals(arrivals_by_area)
         if os.path.isdir(self.green_data_path):
             shutil.rmtree(self.green_data_path)
@@ -128,7 +128,7 @@ class TaxiArrivals:
     def compute_fhv(self):
         print("Processing fhv taxi...")
         fhv_df = self.create_dataframe(self.reader.fhv_set)
-        arrivals_by_area = self.get_arrivals_by_area(fhv_df)
+        arrivals_by_area = self.get_arrivals_by_area(fhv_df).persist()
         max_arr = self.max_arrivals(arrivals_by_area)
         if os.path.isdir(self.fhv_data_path):
             shutil.rmtree(self.fhv_data_path)
