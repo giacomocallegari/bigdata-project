@@ -19,6 +19,7 @@ def __init_yellow(period):
         fields['pu_loc'] = ''
         fields['do_loc'] = ''
         fields['do_time'] = 'Trip_Dropoff_Datetime'
+        fields['fare'] = 'Fare_Amt'
         fields['tip'] = 'Tip_Amt'
         fields['passengers'] = 'Passenger_Count'
 
@@ -32,6 +33,7 @@ def __init_yellow(period):
         fields['do_loc'] = ''
         fields['pu_time'] = 'pickup_datetime'
         fields['do_time'] = 'dropoff_datetime'
+        fields['fare'] = 'fare_amount'
         fields['tip'] = 'tip_amount'
         fields['passengers'] = 'passenger_count'
 
@@ -45,6 +47,7 @@ def __init_yellow(period):
         fields['do_loc'] = ''
         fields['do_time'] = 'pickup_datetime'
         fields['do_time'] = 'dropoff_datetime'
+        fields['fare'] = 'fare_amount'
         fields['tip'] = 'tip_amount'
         fields['passengers'] = 'passenger_count'
 
@@ -58,6 +61,7 @@ def __init_yellow(period):
         fields['do_loc'] = ''
         fields['pu_time'] = 'tpep_pickup_datetime'
         fields['do_time'] = 'tpep_dropoff_datetime'
+        fields['fare'] = 'fare_amount'
         fields['tip'] = 'tip_amount'
         fields['passengers'] = 'passenger_count'
 
@@ -71,6 +75,7 @@ def __init_yellow(period):
         fields['do_loc'] = 'DOLocationID'
         fields['pu_time'] = 'tpep_pickup_datetime'
         fields['do_time'] = 'tpep_dropoff_datetime'
+        fields['fare'] = 'fare_amount'
         fields['tip'] = 'tip_amount'
         fields['passengers'] = 'passenger_count'
 
@@ -92,6 +97,7 @@ def __init_green(period):
         fields['do_loc'] = ''
         fields['pu_time'] = 'Lpep_pickup_datetime'
         fields['do_time'] = 'Lpep_dropoff_datetime'
+        fields['fare'] = 'Fare_amount'
         fields['tip'] = 'Tip_amount'
         fields['passengers'] = 'Passenger_count'
 
@@ -105,6 +111,7 @@ def __init_green(period):
         fields['do_loc'] = ''
         fields['pu_time'] = 'Lpep_pickup_datetime'
         fields['do_time'] = 'Lpep_dropoff_datetime'
+        fields['fare'] = 'Fare_amount'
         fields['tip'] = 'Tip_amount'
         fields['passengers'] = 'Passenger_count'
 
@@ -118,6 +125,7 @@ def __init_green(period):
         fields['do_loc'] = 'DOLocationID'
         fields['pu_time'] = 'lpep_pickup_datetime'
         fields['do_time'] = 'lpep_dropoff_datetime'
+        fields['fare'] = 'fare_amount'
         fields['tip'] = 'tip_amount'
         fields['passengers'] = 'passenger_count'
 
@@ -139,6 +147,7 @@ def __init_fhv(period):
         fields['do_loc'] = 'locationID'
         fields['pu_time'] = 'Pickup_date'
         fields['do_time'] = ''
+        fields['fare'] = ''
         fields['tip'] = ''
 
     # 2017-01 - 2017-04
@@ -151,6 +160,7 @@ def __init_fhv(period):
         fields['do_loc'] = 'DOLocationID'
         fields['do_time'] = 'Pickup_DateTime'
         fields['do_time'] = 'DropOff_datetime'
+        fields['fare'] = ''
         fields['tip'] = ''
 
     # 2017-07 - 2018-04
@@ -163,6 +173,7 @@ def __init_fhv(period):
         fields['do_loc'] = 'DOLocationID'
         fields['do_time'] = 'Pickup_Datetime'
         fields['do_time'] = 'DropOff_datetime'
+        fields['fare'] = ''
         fields['tip'] = ''
 
     return fields

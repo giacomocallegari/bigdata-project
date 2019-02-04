@@ -9,7 +9,7 @@ class DataReader:
 
     is_a_folder = False
     type = TaxiType.ALL
-    period = '0000-00'
+    period = ''
     yellow_set = list()
     green_set = list()
     fhv_set = list()
