@@ -24,8 +24,10 @@ class DataReader:
             if len(header) == len(line):
                 for i in range(len(header)):
                     success = True
-                    if header[i] != line[i]:  # All characters in the line must match
+                    if not line[i].endswith(header[i]):  # All characters in the line must match
                         success = False
+                if success:
+                    return True
         return success
 
     # Checks if the file is of type green.
@@ -37,6 +39,8 @@ class DataReader:
                     success = True
                     if header[i] != line[i]:  # All characters in the line must match
                         success = False
+                if success:
+                    return True
         return success
 
     # Checks if the file is of type fhv.
@@ -48,6 +52,8 @@ class DataReader:
                     success = True
                     if header[i] != line[i]:  # All characters in the line must match
                         success = False
+                if success:
+                    return True
         return success
 
     # Sets the type of the files.
