@@ -4,6 +4,7 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
+from TimeScale import TimeScale
 
 
 class TimeChart:
@@ -11,12 +12,12 @@ class TimeChart:
     folder_path: str  # Path of the output folder
     min_value: str  # Minimum value on Y-axis
     max_value: str  # Maximum value on Y-axis
-    time_scale: str  # Time scale (hour, day or month)
+    time_scale: TimeScale  # Time scale (hour, day or month)
     data_label: str  # Label of the Y-axis
     chart_name: str  # Title of the chart
 
     # Sets the correct parameters for the chart.
-    def __init__(self, folder_path= "", min_value = 0, max_value = 0, time_scale = '', data_label ='Time', chart_name ="Taxi Chart"):
+    def __init__(self, folder_path='', min_value = 0, max_value = 0, time_scale = TimeScale.NONE, data_label ='Time', chart_name ="Taxi Chart"):
         self.folder_path = folder_path
         self.min_value = min_value
         self.max_value = max_value
@@ -39,7 +40,6 @@ class TimeChart:
 
     # Creates the chart.
     def create_chart(self):
-        results_list = self.__get_results()  # Get the data to plot
         ts = self.time_scale # Get the time scale (hour, day or month)
 
         # Scale-dependent parameters
@@ -48,21 +48,23 @@ class TimeChart:
         xstep = 0
         xlabel = ''
 
-        if ts == 'hour':  # Hour of the day
+        if ts == TimeScale.HOUR:  # Hour of the day
             xmin = 0
             xmax = 24
             xstep = 1
             xlabel = 'Time of the day (h)'
-        elif ts == 'day':  # Day of the year
+        elif ts == TimeScale.DAY:  # Day of the year
             xmin = 1
             xmax = 365
             xstep = 30
             xlabel = 'Day of the year (D)'
-        elif ts == 'month':  # Month of the year
+        elif ts == TimeScale.MONTH:  # Month of the year
             xmin = 1
             xmax = 12
             xstep = 1
             xlabel = 'Month of the year (M)'
+        elif ts == TimeScale.YEAR:  # Year
+            print('WIP')
         else:
             print('Invalid time scale')
             return

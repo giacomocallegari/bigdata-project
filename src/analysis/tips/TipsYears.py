@@ -1,4 +1,4 @@
 import TipsTime
 from TimeScale import TimeScale
 
-TipsTime.analyze_tips_time(TimeScale.MONTH)
+TipsTime.analyze_tips_time(TimeScale.YEAR)
