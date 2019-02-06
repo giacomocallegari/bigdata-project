@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from pyspark.sql import SparkSession
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import *
@@ -14,7 +15,7 @@ class DisplacementByNeighborhood:
         .appName("max-trips") \
         .getOrCreate()
 
-    area_id = 42
+    area_id = 2
 
     yellow_data_income_path = os.path.join(os.path.dirname(__file__), "output-data/yellow-income-by-area-displacements")
     yellow_data_outcome_path = os.path.join(os.path.dirname(__file__), "output-data/yellow-outcome-by-area-displacements")
