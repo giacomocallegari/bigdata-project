@@ -38,7 +38,6 @@ plt.ylim(ymin, ymax)
 # Tick limits and frequency
 plt.xticks(np.arange(xmin, xmax+1, xstep))
 plt.yticks(np.arange(ymin, ymax, 1))
-#plt.yticks(np.arange(ymin, ymax, 0.25))
 
 # Axis labels and chart title
 plt.xlabel(xlabel)
