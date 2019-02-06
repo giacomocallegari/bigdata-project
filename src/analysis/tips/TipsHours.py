@@ -4,7 +4,7 @@ from fields_detection import init_fields
 import TaxiType
 import DataReader
 import Tips
-import TipsMapChart as MapChart
+import TipsTimeChart as TimeChart
 import os
 import shutil
 
@@ -17,11 +17,9 @@ class TipsHours:
 
     yellow_data_path = os.path.join(os.path.dirname(__file__), "output-data/yellow-tips-hours")
     green_data_path = os.path.join(os.path.dirname(__file__), "output-data/green-tips-hours")
-    shp_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.shp")
-    dbf_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.dbf")
 
-    yellow_chart = MapChart.MapChart()
-    green_chart = MapChart.MapChart()
+    yellow_chart = TimeChart.TimeChart()
+    green_chart = TimeChart.TimeChart()
 
     def __init__(self, reader):
         self.reader = reader
@@ -97,27 +95,23 @@ class TipsHours:
     def compute_yellow(self):
         print("Processing yellow taxi,..")
         yellow_df = self.create_dataframe(self.reader.yellow_set)
-        if fields['pu_loc'] == '' and fields['do_loc'] == '':
-            yellow_df = Tips.convert_df(yellow_df, fields)
         tips_hour_df = Tips.tips_per_hour(yellow_df, fields)
         max_tip = Tips.max_tips(tips_hour_df, fields)
         if os.path.isdir(self.yellow_data_path):
             shutil.rmtree(self.yellow_data_path)
         tips_hour_df.write.csv(self.yellow_data_path, header=False)
-        self.yellow_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.yellow_data_path, 0, max_tip, "Yellow Taxi Tips - Hour of departure")
+        self.yellow_chart = TimeChart.TimeChart(self.yellow_data_path, 0, max_tip, 'hour', 'Tip amount (USD)', "Yellow Taxi Tips - Hour of departure")
 
     # Analyzes data of type green.
     def compute_green(self):
         print("Processing green taxi,..")
         green_df = self.create_dataframe(self.reader.green_set)
-        if fields['pu_loc'] == '' and fields['do_loc'] == '':
-            green_df = Tips.convert_df(green_df, fields)
-        tips_hour_df = Tips.tips_per_dropoff_area(green_df, fields)
+        tips_hour_df = Tips.tips_per_hour(green_df, fields)
         max_tip = Tips.max_tips(tips_hour_df, fields)
         if os.path.isdir(self.green_data_path):
             shutil.rmtree(self.green_data_path)
         tips_hour_df.write.csv(self.green_data_path, header=False)
-        self.green_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.green_data_path, 0, max_tip, "Yellow Taxi Tips - Hour of departure")
+        self.green_chart = TimeChart.TimeChart(self.green_data_path, 0, max_tip, 'hour', 'Tip amount (USD)', "Green Taxi Tips - Hour of departure")
 
 
 reader = DataReader.DataReader()  # Initialize the DataReader
