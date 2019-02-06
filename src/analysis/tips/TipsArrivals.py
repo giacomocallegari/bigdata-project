@@ -100,7 +100,7 @@ class TipsArrivals:
         if fields['pu_loc'] == '' and fields['do_loc'] == '':
             yellow_df = Tips.convert_df(yellow_df, fields)
         tips_do_area_df = Tips.tips_per_dropoff_area(yellow_df, fields)
-        max_tip = Tips.max_tips(tips_do_area_df, fields)
+        max_tip = Tips.max_tip(tips_do_area_df, fields)
         if os.path.isdir(self.yellow_data_path):
             shutil.rmtree(self.yellow_data_path)
         tips_do_area_df.write.csv(self.yellow_data_path, header=False)
@@ -113,7 +113,7 @@ class TipsArrivals:
         if fields['pu_loc'] == '' and fields['do_loc'] == '':
             green_df = Tips.convert_df(green_df, fields)
         tips_do_area_df = Tips.tips_per_dropoff_area(green_df, fields)
-        max_tip = Tips.max_tips(tips_do_area_df, fields)
+        max_tip = Tips.max_tip(tips_do_area_df, fields)
         if os.path.isdir(self.green_data_path):
             shutil.rmtree(self.green_data_path)
         tips_do_area_df.write.csv(self.green_data_path, header=False)

@@ -10,6 +10,8 @@ from TimeScale import TimeScale
 class TimeChart:
 
     folder_path: str  # Path of the output folder
+    min_time: str  # Minimum time on X-axis
+    max_time: str  # Maximum time on X-axis
     min_value: str  # Minimum value on Y-axis
     max_value: str  # Maximum value on Y-axis
     time_scale: TimeScale  # Time scale (hour, day or month)
@@ -17,8 +19,10 @@ class TimeChart:
     chart_name: str  # Title of the chart
 
     # Sets the correct parameters for the chart.
-    def __init__(self, folder_path='', min_value = 0, max_value = 0, time_scale = TimeScale.NONE, data_label ='Time', chart_name ="Taxi Chart"):
+    def __init__(self, folder_path='', min_time = 0, max_time = 0, min_value = 0, max_value = 0, time_scale = TimeScale.NONE, data_label ='Time', chart_name ="Taxi Chart"):
         self.folder_path = folder_path
+        self.min_time = min_time
+        self.max_time = max_time
         self.min_value = min_value
         self.max_value = max_value
         self.time_scale = time_scale
@@ -43,28 +47,29 @@ class TimeChart:
         ts = self.time_scale # Get the time scale (hour, day or month)
 
         # Scale-dependent parameters
-        xmin = 0
-        xmax = 0
+        xmin = self.min_time
+        xmax = self.max_time
         xstep = 0
         xlabel = ''
 
         if ts == TimeScale.HOUR:  # Hour of the day
-            xmin = 0
-            xmax = 24
+            # xmin = 0
+            # xmax = 24
             xstep = 1
             xlabel = 'Time of the day (h)'
         elif ts == TimeScale.DAY:  # Day of the year
-            xmin = 1
-            xmax = 365
+            # xmin = 1
+            # xmax = 365
             xstep = 30
             xlabel = 'Day of the year (D)'
         elif ts == TimeScale.MONTH:  # Month of the year
-            xmin = 1
-            xmax = 12
+            # xmin = 1
+            # xmax = 12
             xstep = 1
             xlabel = 'Month of the year (M)'
         elif ts == TimeScale.YEAR:  # Year
             print('WIP')
+            return
         else:
             print('Invalid time scale')
             return

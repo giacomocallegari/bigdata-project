@@ -69,14 +69,17 @@ class TipsTime:
         elif ts == TimeScale.YEAR: tips_time_df = Tips.tips_per_year(df, fields)
         else: raise ValueError('Invalid time scale selected')
 
-        max_tip = Tips.max_tips(tips_time_df, fields)
+        max_tip = Tips.max_tip(tips_time_df)
+        min_time = Tips.min_time(tips_time_df)
+        max_time = Tips.max_time(tips_time_df)
+
         if os.path.isdir(self.data_path):
             shutil.rmtree(self.data_path)
         tips_time_df.write.csv(self.data_path, header=False)
 
         type_name = type_names[tt.value].capitalize()
         scale_name = scale_names[ts.value].capitalize()
-        self.chart = TimeChart(self.data_path, 0, max_tip, ts, 'Tip amount (USD)', type_name + ' Taxi Tips - ' + scale_name + ' of departure')
+        self.chart = TimeChart(self.data_path, min_time, max_time, 0, max_tip, ts, 'Tip amount (USD)', type_name + ' Taxi Tips - ' + scale_name + ' of departure')
 
 def analyze_tips_time(time_scale):
     reader = DataReader.DataReader()  # Initialize the DataReader
