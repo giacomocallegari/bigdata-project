@@ -57,7 +57,7 @@ class MapChart:
             poly_data = shape.shape.__geo_interface__
             axes.add_patch(PolygonPatch(poly_data, fc="black", ec="black", alpha=1, zorder=1))
 
-        self.add_points("coordinates", plt)
+        self.add_points(self.folder_path, plt)
 
         axes.axis('scaled')
         plt.axis("off")
