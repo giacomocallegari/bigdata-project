@@ -4,7 +4,7 @@ from fields_detection import init_fields
 from typing import Dict
 from TaxiType import TaxiType, type_names
 from TimeScale import TimeScale, scale_names
-from TipsTimeChart import TimeChart
+from TimeChart import TimeChart
 import DataReader
 import Tips
 import os
