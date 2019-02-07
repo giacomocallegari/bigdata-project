@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import os
 import csv
-import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
 from TimeScale import TimeScale
