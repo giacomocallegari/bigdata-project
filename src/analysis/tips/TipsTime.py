@@ -1,6 +1,7 @@
 from pyspark.sql import SparkSession
 from pyspark.sql import DataFrame
 from fields_detection import init_fields
+from typing import Dict
 from TaxiType import TaxiType, type_names
 from TimeScale import TimeScale, scale_names
 from TipsTimeChart import TimeChart
@@ -19,6 +20,7 @@ class TipsTime:
     taxi_type: TaxiType  # Type of taxi
     time_scale: TimeScale  # Time scale of the analysis
     chart: TimeChart  # Chart for the results
+    fields: Dict[str, str]  # Fields of the dataset
     data_path: str  # Path of the output data
 
 
@@ -29,6 +31,10 @@ class TipsTime:
         self.taxi_type = taxi_type
         self.time_scale = time_scale
         self.set_data_path()
+        self.set_fields()
+
+    def set_fields(self):
+        self.fields = init_fields(self.reader.type, self.reader.period)  # Initialize the correct fields for the queries
 
     # Sets the correct path for the output data.
     def set_data_path(self):
@@ -44,14 +50,20 @@ class TipsTime:
             print('Invalid taxi type selected')
 
     def create_dataframe(self, csv_set: list) -> DataFrame:
-        return self.spark.read.format("csv").option("header", "true").load(csv_set)
+        period = self.reader.period
+        fields = self.fields
+
+        df = self.spark.read.format("csv").option("header", "true").load(csv_set).sample(fraction=1.0, withReplacement=False)  #
+        df = df.filter((df[fields['pu_time']].startswith(period) & df[fields['do_time']].startswith(period)))  # Ignore date outliers
+        return df
 
     # Analyzes the provided data.
-    def compute_data(self, fields):
+    def compute_data(self):
         print('Processing data...')
 
         tt = self.taxi_type
         ts = self.time_scale
+        fields = self.fields
 
         df = DataFrame
         tips_time_df = DataFrame
@@ -86,6 +98,5 @@ def analyze_tips_time(time_scale):
     reader.read_input_params()  # Read the input parameters
     tips_time = TipsTime(reader, reader.type, time_scale)  # Initialize a new instance of TipsTime
 
-    fields = init_fields(tips_time.reader.type, tips_time.reader.period)  # Initialize the correct fields for the queries
-    tips_time.compute_data(fields)  # Compute the results
+    tips_time.compute_data()  # Compute the results
     tips_time.chart.create_chart()  # Show the chart
