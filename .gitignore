@@ -1,4 +1,5 @@
 .idea/
+**/tests/*
 src/venv/
 src/__pycache__/
 src/.idea/
