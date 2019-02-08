@@ -135,7 +135,7 @@ class TaxiDepartures:
         if os.path.isdir(self.fhv_data_path):
             shutil.rmtree(self.fhv_data_path)
         departures_by_area.write.csv(self.fhv_data_path, header=False)
-        self.fhv_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.fhv_data_path, 0, max_dep, "Fhv Taxi Departurews")
+        self.fhv_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.fhv_data_path, 0, max_dep, "Fhv Taxi Departures")
 
 
 reader = DataReader.DataReader()

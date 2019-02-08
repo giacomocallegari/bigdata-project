@@ -73,33 +73,47 @@ class FaresTime:
         ts = self.time_scale
         fields = self.fields
 
-        df = DataFrame
-        fares_time_df = DataFrame
+        if os.path.isdir(self.data_path):  # If the results CSV already exists, use it
+            print('Reading an existing DataFrame...')
 
-        # Read the taxi type
-        if tt == TaxiType.YELLOW: df = self.create_dataframe(self.reader.yellow_set)
-        elif tt == TaxiType.GREEN: df = self.create_dataframe(self.reader.green_set)
-        elif tt == TaxiType.FHV: raise ValueError('FHV type not supported')
-        else: raise ValueError('Invalid taxi type selected')
+            fares_time_df = self.spark.read.csv(self.data_path, inferSchema=True)
+        else:  # Otherwise, perform the analysis
+            print('Creating a new DataFrame...')
 
-        # Read the time scale
-        if ts == TimeScale.HOUR: fares_time_df = Fares.fares_per_hour(df, fields)
-        elif ts == TimeScale.DAY: fares_time_df = Fares.fares_per_day(df, fields)
-        elif ts == TimeScale.MONTH: fares_time_df = Fares.fares_per_month(df, fields)
-        elif ts == TimeScale.YEAR: fares_time_df = Fares.fares_per_year(df, fields)
-        else: raise ValueError('Invalid time scale selected')
+            # Read the taxi type
+            if tt == TaxiType.YELLOW:
+                df = self.create_dataframe(self.reader.yellow_set)
+            elif tt == TaxiType.GREEN:
+                df = self.create_dataframe(self.reader.green_set)
+            elif tt == TaxiType.FHV:
+                raise ValueError('FHV type not supported')
+            else:
+                raise ValueError('Invalid taxi type selected')
 
+            # Read the time scale
+            if ts == TimeScale.HOUR:
+                fares_time_df = Fares.fares_per_hour(df, fields)
+            elif ts == TimeScale.DAY:
+                fares_time_df = Fares.fares_per_day(df, fields)
+            elif ts == TimeScale.MONTH:
+                fares_time_df = Fares.fares_per_month(df, fields)
+            elif ts == TimeScale.YEAR:
+                fares_time_df = Fares.fares_per_year(df, fields)
+            else:
+                raise ValueError('Invalid time scale selected')
+
+            fares_time_df.write.csv(self.data_path, header=False)  # Save the results as a CSV file
+
+        # Compute the value limits
         max_fare = Fares.max_fare(fares_time_df)
         min_time = Fares.min_time(fares_time_df)
         max_time = Fares.max_time(fares_time_df)
 
-        if os.path.isdir(self.data_path):
-            shutil.rmtree(self.data_path)
-        fares_time_df.write.csv(self.data_path, header=False)
-
+        # Initialize the correct labels
         type_name = type_names[tt.value].capitalize()
         scale_name = scale_names[ts.value].capitalize()
-        self.chart = TimeChart(self.data_path, min_time, max_time, 0, max_fare, ts, 'Fare amount (USD)', type_name + ' Taxi Fares - ' + scale_name + ' of departure')
+
+        self.chart = TimeChart(self.data_path, min_time, max_time, 0, max_fare, ts, 'Fare amount (USD)', type_name + ' Taxi Fares - ' + scale_name + ' of departure')  # Create the chart
 
 def analyze_fares_time(time_scale):
     reader = DataReader.DataReader()  # Initialize the DataReader

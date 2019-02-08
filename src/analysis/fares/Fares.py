@@ -14,16 +14,16 @@ def convert_df(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
     return taxi_df
 
 # Finds the maximum fare in an aggregated DataFrame.
-def max_fare(agg_df: DataFrame):
-    return agg_df.agg(max(agg_df[1])).collect()[0][0]
+def max_fare(agg_df: DataFrame) -> float:
+    return float(agg_df.agg(max(agg_df[1])).collect()[0][0])
 
 # Finds the maximum fare in an aggregated DataFrame.
-def min_time(agg_df: DataFrame):
-    return agg_df.agg(min(agg_df[0])).collect()[0][0]
+def min_time(agg_df: DataFrame) -> int:
+    return int(agg_df.agg(min(agg_df[0])).collect()[0][0])
 
 # Finds the maximum fare in an aggregated DataFrame.
-def max_time(agg_df: DataFrame):
-    return agg_df.agg(max(agg_df[0])).collect()[0][0]
+def max_time(agg_df: DataFrame) -> int:
+    return int(agg_df.agg(max(agg_df[0])).collect()[0][0])
 
 # Finds the average fare amount per pick-up location.
 def fares_per_pickup_area(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
