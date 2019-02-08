@@ -58,10 +58,12 @@ class FaresTime:
     # Creates a DataFrame from the provided CSV file.
     def create_dataframe(self, csv_set: list) -> DataFrame:
         period = self.reader.period
+        year = period[:4]
         fields = self.fields
 
         df = self.spark.read.format("csv").option("header", "true").load(csv_set).sample(fraction=1.0, withReplacement=False)
-        if not self.multiple: df = df.filter((df[fields['pu_time']].startswith(period) & df[fields['do_time']].startswith(period)))  # Ignore date outliers
+        if self.multiple: df = df.filter((df[fields['pu_time']].startswith(year)) & df[fields['do_time']].startswith(year))  # Ignore year outliers
+        else: df = df.filter((df[fields['pu_time']].startswith(period) & df[fields['do_time']].startswith(period)))  # Ignore month outliers
         return df
 
     # Analyzes the provided data.
