@@ -13,7 +13,7 @@ import os
 class TipsTime:
     spark = SparkSession \
         .builder \
-        .appName("max-fares-time") \
+        .appName("max-tips-time") \
         .getOrCreate()
 
     taxi_type: TaxiType  # Type of taxi
@@ -48,7 +48,7 @@ class TipsTime:
             type_name = type_names[self.taxi_type.value]  # Set the name of the taxi type
             try:
                 scale_name = scale_names[self.time_scale.value]  # Set the name of the time scale
-                subpath = 'output-data/' + type_name + '-fares-' + scale_name + 's'
+                subpath = 'output-data/' + type_name + '-tips-' + scale_name + 's'
                 self.data_path = os.path.join(os.path.dirname(__file__), subpath)  # Set the output path
             except IndexError:
                 print('Invalid time scale selected')
@@ -75,7 +75,7 @@ class TipsTime:
         if os.path.isdir(self.data_path):  # If the results CSV already exists, use it
             print('Reading an existing DataFrame...')
 
-            fares_time_df = self.spark.read.csv(self.data_path, inferSchema=True)
+            tips_time_df = self.spark.read.csv(self.data_path, inferSchema=True)
         else:  # Otherwise, perform the analysis
             print('Creating a new DataFrame...')
 
@@ -91,33 +91,33 @@ class TipsTime:
 
             # Read the time scale
             if ts == TimeScale.HOUR:
-                fares_time_df = Tips.fares_per_hour(df, fields)
+                tips_time_df = Tips.tips_per_hour(df, fields)
             elif ts == TimeScale.DAY:
-                fares_time_df = Tips.fares_per_day(df, fields)
+                tips_time_df = Tips.tips_per_day(df, fields)
             elif ts == TimeScale.MONTH:
-                fares_time_df = Tips.fares_per_month(df, fields)
+                tips_time_df = Tips.tips_per_month(df, fields)
             elif ts == TimeScale.YEAR:
-                fares_time_df = Tips.fares_per_year(df, fields)
+                tips_time_df = Tips.tips_per_year(df, fields)
             else:
                 raise ValueError('Invalid time scale selected')
 
-            fares_time_df.write.csv(self.data_path, header=False)  # Save the results as a CSV file
+            tips_time_df.write.csv(self.data_path, header=False)  # Save the results as a CSV file
 
         # Compute the value limits
-        max_fare = Tips.max_fare(fares_time_df)
-        min_time = Tips.min_time(fares_time_df)
-        max_time = Tips.max_time(fares_time_df)
+        max_tip = Tips.max_tip(tips_time_df)
+        min_time = Tips.min_time(tips_time_df)
+        max_time = Tips.max_time(tips_time_df)
 
         # Initialize the correct labels
         type_name = type_names[tt.value].capitalize()
         scale_name = scale_names[ts.value].capitalize()
 
-        self.chart = TimeChart(self.data_path, min_time, max_time, 0, max_fare, ts, 'Tip amount (USD)', type_name + ' Taxi Tips - ' + scale_name + ' of departure')  # Create the chart
+        self.chart = TimeChart(self.data_path, min_time, max_time, 0, max_tip, ts, 'Tip amount (USD)', type_name + ' Taxi Tips - ' + scale_name + ' of departure')  # Create the chart
 
-def analyze_fares_time(time_scale):
+def analyze_tips_time(time_scale):
     reader = DataReader.DataReader()  # Initialize the DataReader
     reader.read_input_params()  # Read the input parameters
-    fares_time = TipsTime(reader, reader.type, time_scale)  # Initialize a new instance of TipsTime
+    tips_time = TipsTime(reader, reader.type, time_scale)  # Initialize a new instance of TipsTime
 
-    fares_time.compute_data()  # Compute the results
-    fares_time.chart.create_chart()  # Show the chart
+    tips_time.compute_data()  # Compute the results
+    tips_time.chart.create_chart()  # Show the chart
