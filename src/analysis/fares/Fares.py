@@ -17,11 +17,11 @@ def convert_df(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
 def max_fare(agg_df: DataFrame) -> float:
     return float(agg_df.agg(max(agg_df[1])).collect()[0][0])
 
-# Finds the maximum fare in an aggregated DataFrame.
+# Finds the maximum time or date in an aggregated DataFrame.
 def min_time(agg_df: DataFrame) -> int:
     return int(agg_df.agg(min(agg_df[0])).collect()[0][0])
 
-# Finds the maximum fare in an aggregated DataFrame.
+# Finds the maximum time or date in an aggregated DataFrame.
 def max_time(agg_df: DataFrame) -> int:
     return int(agg_df.agg(max(agg_df[0])).collect()[0][0])
 

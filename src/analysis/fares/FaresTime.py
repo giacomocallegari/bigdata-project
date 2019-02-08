@@ -8,7 +8,6 @@ from TimeChart import TimeChart
 import DataReader
 import Fares
 import os
-import shutil
 
 
 class FaresTime:
