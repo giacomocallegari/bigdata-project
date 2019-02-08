@@ -27,24 +27,24 @@ def max_time(agg_df: DataFrame) -> int:
 
 # Finds the average passenger amount per pick-up location.
 def passengers_per_pickup_area(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
-    return taxi_df.groupBy(fields['pu_loc']).agg(avg(fields['passenger'])).orderBy('avg(' + fields['passenger'] + ')', ascending=False)
+    return taxi_df.groupBy(fields['pu_loc']).agg(avg(fields['passengers'])).orderBy('avg(' + fields['passengers'] + ')', ascending=False)
 
 # Finds the average passenger amount per drop-off location.
 def passengers_per_dropoff_area(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
-    return taxi_df.groupBy(fields['do_loc']).agg(avg(fields['passenger'])).orderBy('avg(' + fields['passenger'] + ')', ascending=False)
+    return taxi_df.groupBy(fields['do_loc']).agg(avg(fields['passengers'])).orderBy('avg(' + fields['passengers'] + ')', ascending=False)
 
 # Finds the average passenger amount per hour of the day.
 def passengers_per_hour(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
-    return taxi_df.groupBy(hour(fields['do_time']).alias('hour_of_day')).agg(avg(fields['passenger']))
+    return taxi_df.groupBy(hour(fields['do_time']).alias('hour_of_day')).agg(avg(fields['passengers']))
 
 # Finds the average passenger amount per day of the year.
 def passengers_per_day(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
-    return taxi_df.groupBy(dayofyear(fields['do_time']).alias('day_of_year')).agg(avg(fields['passenger']))
+    return taxi_df.groupBy(dayofyear(fields['do_time']).alias('day_of_year')).agg(avg(fields['passengers']))
 
 # Finds the average passenger amount per month of the year.
 def passengers_per_month(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
-    return taxi_df.groupBy(month(fields['do_time']).alias('month_of_year')).agg(avg(fields['passenger']))
+    return taxi_df.groupBy(month(fields['do_time']).alias('month_of_year')).agg(avg(fields['passengers']))
 
 # Finds the average passenger amount per year.
 def passengers_per_year(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
-    return taxi_df.groupBy(year(fields['do_time']).alias('year')).agg(avg(fields['passenger']))
+    return taxi_df.groupBy(year(fields['do_time']).alias('year')).agg(avg(fields['passengers']))
