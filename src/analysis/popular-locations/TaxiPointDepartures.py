@@ -8,6 +8,7 @@ import os
 import shutil
 import PointMapChart
 
+
 class TaxiPointDepartures:
     spark = SparkSession \
         .builder \
@@ -20,8 +21,6 @@ class TaxiPointDepartures:
     shp_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.shp")
     dbf_file = os.path.join(os.path.dirname(__file__), "../../shapefile/taxi_zones.dbf")
 
-
-
     def __init__(self, reader):
         self.reader = reader
 
@@ -32,20 +31,43 @@ class TaxiPointDepartures:
         if os.path.isdir(self.yellow_data_path):
             shutil.rmtree(self.yellow_data_path)
         df = self.create_dataframe(reader.yellow_set)
-        df.filter((col(fields["pu_lon"]) != 0.0) | (col(fields["pu_lat"]) != 0.0)).select(fields["pu_lon"], fields["pu_lat"]).write.csv(self.yellow_data_path)
+        df.filter(
+            ((col(fields["pu_lon"]) != 0.0) &
+             (col(fields["pu_lat"]) != 0.0)) &
+            (col(fields["pu_lat"]) <= 90) &
+            (col(fields["pu_lat"]) >= -90) &
+            (col(fields["pu_lon"]) <= 180) &
+            (col(fields["pu_lon"]) >= -180)) \
+            .select(fields["pu_lat"], fields["pu_lon"])\
+            .write.csv(self.yellow_data_path)
 
     def compute_green(self):
         if os.path.isdir(self.green_data_path):
             shutil.rmtree(self.green_data_path)
         df = self.create_dataframe(reader.green_set)
-        df.filter((col(fields["pu_lon"]) != 0.0) | (col(fields["pu_lat"]) != 0.0)).select(fields["pu_lon"], fields["pu_lat"]).write.csv(self.green_data_path)
+        df.filter(
+            ((col(fields["pu_lon"]) != 0.0) &
+             (col(fields["pu_lat"]) != 0.0)) &
+            (col(fields["pu_lat"]) <= 90) &
+            (col(fields["pu_lat"]) >= -90) &
+            (col(fields["pu_lon"]) <= 180) &
+            (col(fields["pu_lon"]) >= -180)) \
+            .select(fields["pu_lat"], fields["pu_lon"])\
+            .write.csv(self.green_data_path)
 
     def compute_fhv(self):
         if os.path.isdir(self.fhv_data_path):
             shutil.rmtree(self.fhv_data_path)
         df = self.create_dataframe(reader.green_set)
-        df.filter((col(fields["pu_lon"]) != 0.0) | (col(fields["pu_lat"]) != 0.0)).select(fields["pu_lon"], fields["pu_lat"]).write.csv(self.fhv_data_path)
-
+        df.filter(
+            ((col(fields["pu_lon"]) != 0.0) &
+             (col(fields["pu_lat"]) != 0.0)) &
+            (col(fields["pu_lat"]) <= 90) &
+            (col(fields["pu_lat"]) >= -90) &
+            (col(fields["pu_lon"]) <= 180) &
+            (col(fields["pu_lon"]) >= -180)) \
+            .select(fields["pu_lat"], fields["pu_lon"])\
+            .write.csv(self.fhv_data_path)
 
 
 reader = DataReader.DataReader()  # Initialize the DataReader

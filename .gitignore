@@ -4,3 +4,4 @@ src/__pycache__/
 src/.idea/
 **/output-data/*
 **/__pycache__/
+**/output-point-data/*
