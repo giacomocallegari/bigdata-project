@@ -13,27 +13,38 @@ def convert_df(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
 
     return taxi_df
 
-# Finds the maximum fare in an ordered, aggregated DataFrame.
-def max_fares(fares_df: DataFrame, fields: Dict[str, str]):
-    max_fare = fares_df.collect()[0]
-    return max_fare['avg(' + fields['fare'] + ')']
+# Finds the maximum fare in an aggregated DataFrame.
+def max_fare(agg_df: DataFrame):
+    return agg_df.agg(max(agg_df[1])).collect()[0][0]
 
-# Finds the fare amount per pick-up location.
+# Finds the maximum fare in an aggregated DataFrame.
+def min_time(agg_df: DataFrame):
+    return agg_df.agg(min(agg_df[0])).collect()[0][0]
+
+# Finds the maximum fare in an aggregated DataFrame.
+def max_time(agg_df: DataFrame):
+    return agg_df.agg(max(agg_df[0])).collect()[0][0]
+
+# Finds the average fare amount per pick-up location.
 def fares_per_pickup_area(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
     return taxi_df.groupBy(fields['pu_loc']).agg(avg(fields['fare'])).orderBy('avg(' + fields['fare'] + ')', ascending=False)
 
-# Finds the fare amount per drop-off location.
+# Finds the average fare amount per drop-off location.
 def fares_per_dropoff_area(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
     return taxi_df.groupBy(fields['do_loc']).agg(avg(fields['fare'])).orderBy('avg(' + fields['fare'] + ')', ascending=False)
 
-# Finds the fare amount per hour of the day.
+# Finds the average fare amount per hour of the day.
 def fares_per_hour(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
-    return taxi_df.groupBy(hour(fields['do_time']).alias('hour_of_day')).agg(avg(fields['fare'])).orderBy('avg(' + fields['fare'] + ')', ascending=False)
+    return taxi_df.groupBy(hour(fields['do_time']).alias('hour_of_day')).agg(avg(fields['fare']))
 
-# Finds the fare amount per day of the year.
+# Finds the average fare amount per day of the year.
 def fares_per_day(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
-    return taxi_df.groupBy(dayofyear(fields['do_time']).alias('day_of_year')).agg(avg(fields['fare'])).orderBy('avg(' + fields['fare'] + ')', ascending=False)
+    return taxi_df.groupBy(dayofyear(fields['do_time']).alias('day_of_year')).agg(avg(fields['fare']))
 
-# Finds the fare amount per month of the year.
+# Finds the average fare amount per month of the year.
 def fares_per_month(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
-    return taxi_df.groupBy(month(fields['do_time']).alias('month_of_year')).agg(avg(fields['fare'])).orderBy('avg(' + fields['fare'] + ')', ascending=False)
+    return taxi_df.groupBy(month(fields['do_time']).alias('month_of_year')).agg(avg(fields['fare']))
+
+# Finds the average fare amount per year.
+def fares_per_year(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
+    return taxi_df.groupBy(year(fields['do_time']).alias('year')).agg(avg(fields['fare']))

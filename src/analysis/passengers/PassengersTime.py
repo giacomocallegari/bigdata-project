@@ -6,15 +6,15 @@ from TaxiType import TaxiType, type_names
 from TimeScale import TimeScale, scale_names
 from TimeChart import TimeChart
 import DataReader
-import Tips
+import Passengers
 import os
 import shutil
 
 
-class TipsTime:
+class PassengersTime:
     spark = SparkSession \
         .builder \
-        .appName("max-tips-time") \
+        .appName("max-passengers-time") \
         .getOrCreate()
 
     taxi_type: TaxiType  # Type of taxi
@@ -42,7 +42,7 @@ class TipsTime:
             type_name = type_names[self.taxi_type.value]  # Set the name of the taxi type
             try:
                 scale_name = scale_names[self.time_scale.value]  # Set the name of the time scale
-                subpath = 'output-data/' + type_name + '-tips-' + scale_name + 's'
+                subpath = 'output-data/' + type_name + '-passengers-' + scale_name + 's'
                 self.data_path = os.path.join(os.path.dirname(__file__), subpath)  # Set the output path
             except IndexError:
                 print('Invalid time scale selected')
@@ -66,7 +66,7 @@ class TipsTime:
         fields = self.fields
 
         df = DataFrame
-        tips_time_df = DataFrame
+        passengers_time_df = DataFrame
 
         # Read the taxi type
         if tt == TaxiType.YELLOW: df = self.create_dataframe(self.reader.yellow_set)
@@ -75,28 +75,28 @@ class TipsTime:
         else: raise ValueError('Invalid taxi type selected')
 
         # Read the time scale
-        if ts == TimeScale.HOUR: tips_time_df = Tips.tips_per_hour(df, fields)
-        elif ts == TimeScale.DAY: tips_time_df = Tips.tips_per_day(df, fields)
-        elif ts == TimeScale.MONTH: tips_time_df = Tips.tips_per_month(df, fields)
-        elif ts == TimeScale.YEAR: tips_time_df = Tips.tips_per_year(df, fields)
+        if ts == TimeScale.HOUR: passengers_time_df = Passengers.passengers_per_hour(df, fields)
+        elif ts == TimeScale.DAY: passengers_time_df = Passengers.passengers_per_day(df, fields)
+        elif ts == TimeScale.MONTH: passengers_time_df = Passengers.passengers_per_month(df, fields)
+        elif ts == TimeScale.YEAR: passengers_time_df = Passengers.passengers_per_year(df, fields)
         else: raise ValueError('Invalid time scale selected')
 
-        max_tip = Tips.max_tip(tips_time_df)
-        min_time = Tips.min_time(tips_time_df)
-        max_time = Tips.max_time(tips_time_df)
+        max_passenger = Passengers.max_passengers(passengers_time_df)
+        min_time = Passengers.min_time(passengers_time_df)
+        max_time = Passengers.max_time(passengers_time_df)
 
         if os.path.isdir(self.data_path):
             shutil.rmtree(self.data_path)
-        tips_time_df.write.csv(self.data_path, header=False)
+        passengers_time_df.write.csv(self.data_path, header=False)
 
         type_name = type_names[tt.value].capitalize()
         scale_name = scale_names[ts.value].capitalize()
-        self.chart = TimeChart(self.data_path, min_time, max_time, 0, max_tip, ts, 'Tip amount (USD)', type_name + ' Taxi Tips - ' + scale_name + ' of departure')
+        self.chart = TimeChart(self.data_path, min_time, max_time, 0, max_passenger, ts, 'Passenger amount', type_name + ' Taxi Passengers - ' + scale_name + ' of departure')
 
-def analyze_tips_time(time_scale):
+def analyze_passengers_time(time_scale):
     reader = DataReader.DataReader()  # Initialize the DataReader
     reader.read_input_params()  # Read the input parameters
-    tips_time = TipsTime(reader, reader.type, time_scale)  # Initialize a new instance of TipsTime
+    passengers_time = PassengersTime(reader, reader.type, time_scale)  # Initialize a new instance of PassengersTime
 
-    tips_time.compute_data()  # Compute the results
-    tips_time.chart.create_chart()  # Show the chart
+    passengers_time.compute_data()  # Compute the results
+    passengers_time.chart.create_chart()  # Show the chart

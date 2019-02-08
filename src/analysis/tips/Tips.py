@@ -13,10 +13,17 @@ def convert_df(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
 
     return taxi_df
 
-# Finds the maximum tip in an ordered, aggregated DataFrame.
-def max_tips(tips_df: DataFrame, fields: Dict[str, str]):
-    max_tip = tips_df.collect()[0]
-    return max_tip['avg(' + fields['tip'] + ')']
+# Finds the maximum tip in an aggregated DataFrame.
+def max_tip(agg_df: DataFrame):
+    return agg_df.agg(max(agg_df[1])).collect()[0][0]
+
+# Finds the maximum tip in an aggregated DataFrame.
+def min_time(agg_df: DataFrame):
+    return agg_df.agg(min(agg_df[0])).collect()[0][0]
+
+# Finds the maximum tip in an aggregated DataFrame.
+def max_time(agg_df: DataFrame):
+    return agg_df.agg(max(agg_df[0])).collect()[0][0]
 
 # Finds the average tip amount per pick-up location.
 def tips_per_pickup_area(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
@@ -28,16 +35,16 @@ def tips_per_dropoff_area(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFra
 
 # Finds the average tip amount per hour of the day.
 def tips_per_hour(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
-    return taxi_df.groupBy(hour(fields['do_time']).alias('hour_of_day')).agg(avg(fields['tip'])).orderBy('avg(' + fields['tip'] + ')', ascending=False)
+    return taxi_df.groupBy(hour(fields['do_time']).alias('hour_of_day')).agg(avg(fields['tip']))
 
 # Finds the average tip amount per day of the year.
 def tips_per_day(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
-    return taxi_df.groupBy(dayofyear(fields['do_time']).alias('day_of_year')).agg(avg(fields['tip'])).orderBy('avg(' + fields['tip'] + ')', ascending=False)
+    return taxi_df.groupBy(dayofyear(fields['do_time']).alias('day_of_year')).agg(avg(fields['tip']))
 
 # Finds the average tip amount per month of the year.
 def tips_per_month(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
-    return taxi_df.groupBy(month(fields['do_time']).alias('month_of_year')).agg(avg(fields['tip'])).orderBy('avg(' + fields['tip'] + ')', ascending=False)
+    return taxi_df.groupBy(month(fields['do_time']).alias('month_of_year')).agg(avg(fields['tip']))
 
 # Finds the average tip amount per year.
 def tips_per_year(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
-    return taxi_df.groupBy(year(fields['do_time']).alias('year')).agg(avg(fields['tip'])).orderBy('avg(' + fields['tip'] + ')', ascending=False)
+    return taxi_df.groupBy(year(fields['do_time']).alias('year')).agg(avg(fields['tip']))
