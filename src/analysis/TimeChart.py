@@ -104,4 +104,5 @@ class TimeChart:
         plt.grid(axis='y', which='major')  # Add the major Y grid
         plt.grid(axis='x', which='minor', linestyle='--')  # Add the minor X grid
         plt.grid(axis='y', which='minor', linestyle='--')  # Add the minor Y grid
+        plt.savefig(self.folder_path + '-chart.png', dpi=500)
         plt.show()  # Show the chart
