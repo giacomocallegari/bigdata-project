@@ -20,6 +20,7 @@ class FaresTime:
     taxi_type: TaxiType  # Type of taxi
     time_scale: TimeScale  # Time scale of the analysis
     chart: TimeChart  # Chart for the results
+    multiple: bool  # Flag for analyzing multiple files
     fields: Dict[str, str]  # Fields of the dataset
     data_path: str  # Path of the output data
 
@@ -30,14 +31,20 @@ class FaresTime:
 
         self.taxi_type = taxi_type
         self.time_scale = time_scale
-        self.set_data_path()
-        self.set_fields()
+        self.__set_multiple()
+        self.__set_fields()
+        self.__set_data_path()
 
-    def set_fields(self):
+    # Sets the multiple file flag.
+    def __set_multiple(self):
+        self.multiple = self.reader.is_a_folder
+
+    # Sets the correct fields for the queries.
+    def __set_fields(self):
         self.fields = init_fields(self.reader.type, self.reader.period)  # Initialize the correct fields for the queries
 
     # Sets the correct path for the output data.
-    def set_data_path(self):
+    def __set_data_path(self):
         try:
             type_name = type_names[self.taxi_type.value]  # Set the name of the taxi type
             try:
@@ -49,12 +56,13 @@ class FaresTime:
         except IndexError:
             print('Invalid taxi type selected')
 
+    # Creates a DataFrame from the provided CSV file.
     def create_dataframe(self, csv_set: list) -> DataFrame:
         period = self.reader.period
         fields = self.fields
 
-        df = self.spark.read.format("csv").option("header", "true").load(csv_set).sample(fraction=1.0, withReplacement=False)  #
-        df = df.filter((df[fields['pu_time']].startswith(period) & df[fields['do_time']].startswith(period)))  # Ignore date outliers
+        df = self.spark.read.format("csv").option("header", "true").load(csv_set).sample(fraction=1.0, withReplacement=False)
+        if not self.multiple: df = df.filter((df[fields['pu_time']].startswith(period) & df[fields['do_time']].startswith(period)))  # Ignore date outliers
         return df
 
     # Analyzes the provided data.
@@ -71,7 +79,7 @@ class FaresTime:
         # Read the taxi type
         if tt == TaxiType.YELLOW: df = self.create_dataframe(self.reader.yellow_set)
         elif tt == TaxiType.GREEN: df = self.create_dataframe(self.reader.green_set)
-        elif tt == TaxiType.FHV: print('FHV type not supported')
+        elif tt == TaxiType.FHV: raise ValueError('FHV type not supported')
         else: raise ValueError('Invalid taxi type selected')
 
         # Read the time scale
