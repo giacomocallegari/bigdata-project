@@ -46,7 +46,7 @@ class MapChart:
             if file_name.startswith("part-") and file_name.endswith(".csv"):
                 print("FILE " + file_name)
                 for chunk in pd.read_csv(folder_path + "/" + file_name, chunksize=1000, header=None):
-                    x, y = self.__convert_projection(chunk[0].values, chunk[1].values)
+                    x, y = self.__convert_projection(chunk[1].values, chunk[0].values)
                     plt.plot(x, y, "y,")
 
     def create_chart(self):
