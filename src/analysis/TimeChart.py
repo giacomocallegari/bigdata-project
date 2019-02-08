@@ -48,20 +48,22 @@ class TimeChart:
         # Scale-dependent parameters
         xmin = self.min_time
         xmax = self.max_time
-        x_major_step = 0
-        xlabel = ''
 
         if ts == TimeScale.HOUR:  # Hour of the day
             x_major_step = 1
+            x_minor_step = 1
             xlabel = 'Time of the day (h)'
         elif ts == TimeScale.DAY:  # Day of the year
-            x_major_step = 7
+            x_major_step = 50
+            x_minor_step = 10
             xlabel = 'Day of the year (D)'
         elif ts == TimeScale.MONTH:  # Month of the year
             x_major_step = 3
+            x_minor_step = 1
             xlabel = 'Month of the year (M)'
         elif ts == TimeScale.YEAR:  # Year
             x_major_step = 1
+            x_minor_step = 0
             xlabel = 'Year (Y)'
         else:
             print('Invalid time scale')
@@ -69,7 +71,7 @@ class TimeChart:
 
         # Set the major and minor ticks on the axes
         x_major_locator = MultipleLocator(x_major_step)  # X major ticks
-        x_minor_locator = MultipleLocator(1)  # X minor ticks
+        x_minor_locator = MultipleLocator(x_minor_step)  # X minor ticks
         y_major_locator = MultipleLocator(1)  # Y major ticks
         y_minor_locator = MultipleLocator(0.25)  # Y minor ticks
 
@@ -97,7 +99,6 @@ class TimeChart:
         plt.title(self.chart_name)
 
         # Create and show the chart
-        plt.scatter(x, y)  # Add the points
         plt.plot(x, y)  # Draw the line
         plt.grid(axis='x', which='major')  # Add the major X grid
         plt.grid(axis='y', which='major')  # Add the major Y grid
