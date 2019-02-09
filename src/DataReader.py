@@ -86,12 +86,15 @@ class DataReader:
                         reader = csv.reader(current_file)
                         current_header = next(reader)
                         if self.__is_yellow(current_header):
+                            if self.type == TaxiType.YELLOW: self.__set_period_param(folder_path + file)
                             exist_valid_csv = True
                             self.yellow_set.append(folder_path + file)
                         elif self.__is_green(current_header):
+                            if self.type == TaxiType.GREEN: self.__set_period_param(folder_path + file)
                             exist_valid_csv = True
                             self.green_set.append(folder_path + file)
                         elif self.__is_fhv(current_header):
+                            if self.type == TaxiType.FHV: self.__set_period_param(folder_path + file)
                             exist_valid_csv = True
                             self.fhv_set.append(folder_path + file)
                 except Exception:
@@ -125,11 +128,11 @@ class DataReader:
                 self.is_a_folder = True
                 try:
                     folder_path = sys.argv[2]
+                    if len(sys.argv) == 4:
+                        self.__set_type_param(sys.argv[3])
                     if not folder_path.endswith("/"):
                         folder_path += "/"
                     self.__filter_csv(folder_path)
-                    if len(sys.argv) == 4:
-                        self.__set_type_param(sys.argv[3])
                 except IndexError:
                     print("No folder path specified")
                     sys.exit()

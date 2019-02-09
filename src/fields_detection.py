@@ -10,8 +10,8 @@ def __init_yellow(period):
     print("yellow " + period)
     fields = {}
 
-    # 2009-01 - 2009-10
-    if '2009-01' <= period <= '2009-10':
+    # 2009-01 - 2009-12
+    if '2009-01' <= period <= '2009-12':
         fields['pu_lon'] = 'Start_Lon'
         fields['pu_lat'] = 'Start_Lat'
         fields['do_lon'] = 'End_Lon'
@@ -23,8 +23,8 @@ def __init_yellow(period):
         fields['tip'] = 'Tip_Amt'
         fields['passengers'] = 'Passenger_Count'
 
-    # 2010-01 - 2013-10
-    if '2010-01' <= period <= '2013-10':
+    # 2010-01 - 2013-12
+    if '2010-01' <= period <= '2013-12':
         fields['pu_lon'] = 'pickup_longitude'
         fields['pu_lat'] = 'pickup_latitude'
         fields['do_lon'] = 'dropoff_longitude'
@@ -37,8 +37,8 @@ def __init_yellow(period):
         fields['tip'] = 'tip_amount'
         fields['passengers'] = 'passenger_count'
 
-    # 2014-01 - 2014-10
-    if '2014-01' <= period <= '2014-10':
+    # 2014-01 - 2014-12
+    if '2014-01' <= period <= '2014-12':
         fields['pu_lon'] = 'pickup_longitude'
         fields['pu_lat'] = 'pickup_latitude'
         fields['do_lon'] = 'dropoff_longitude'
@@ -51,8 +51,8 @@ def __init_yellow(period):
         fields['tip'] = 'tip_amount'
         fields['passengers'] = 'passenger_count'
 
-    # 2015-01 - 2016-04
-    if '2015-01' <= period <= '2016-04':
+    # 2015-01 - 2016-06
+    if '2015-01' <= period <= '2016-06':
         fields['pu_lon'] = 'pickup_longitude'
         fields['pu_lat'] = 'pickup_latitude'
         fields['do_lon'] = 'dropoff_longitude'
@@ -65,8 +65,8 @@ def __init_yellow(period):
         fields['tip'] = 'tip_amount'
         fields['passengers'] = 'passenger_count'
 
-    # 2016-07 - 2018-04
-    if '2016-07' <= period <= '2018-04':
+    # 2016-07 - 2018-12
+    if '2016-07' <= period <= '2018-12':
         fields['pu_lon'] = ''
         fields['pu_lat'] = ''
         fields['do_lon'] = ''
@@ -87,8 +87,8 @@ def __init_green(period):
     print("green " + period)
     fields = {}
 
-    # 2013-10 - 2014-10
-    if '2013-10' <= period <= '2014-10':
+    # 2013-10 - 2014-12
+    if '2013-10' <= period <= '2014-12':
         fields['pu_lon'] = 'Pickup_longitude'
         fields['pu_lat'] = 'Pickup_latitude'
         fields['do_lon'] = 'Dropoff_longitude'
@@ -101,8 +101,8 @@ def __init_green(period):
         fields['tip'] = 'Tip_amount'
         fields['passengers'] = 'Passenger_count'
 
-    # 2015-01 - 2016-04
-    if '2015-01' <= period <= '2016-04':
+    # 2015-01 - 2016-06
+    if '2015-01' <= period <= '2016-06':
         fields['pu_lon'] = 'Pickup_longitude'
         fields['pu_lat'] = 'Pickup_latitude'
         fields['do_lon'] = 'Dropoff_longitude'
@@ -115,8 +115,8 @@ def __init_green(period):
         fields['tip'] = 'Tip_amount'
         fields['passengers'] = 'Passenger_count'
 
-    # 2016-07 - 2018-04
-    if '2016-07' <= period <= '2018-04':
+    # 2016-07 - 2018-12
+    if '2016-07' <= period <= '2018-12':
         fields['pu_lon'] = ''
         fields['pu_lat'] = ''
         fields['do_lon'] = ''
@@ -137,8 +137,8 @@ def __init_fhv(period):
     print("fhv " + period)
     fields = {}
 
-    # 2015-01 - 2016-10
-    if '2015-01' <= period <= '2016-10':
+    # 2015-01 - 2016-12
+    if '2015-01' <= period <= '2016-12':
         fields['pu_lon'] = ''
         fields['pu_lat'] = ''
         fields['do_lon'] = ''
@@ -150,8 +150,8 @@ def __init_fhv(period):
         fields['fare'] = ''
         fields['tip'] = ''
 
-    # 2017-01 - 2017-04
-    if '2017-01' <= period <= '2017-04':
+    # 2017-01 - 2017-06
+    if '2017-01' <= period <= '2017-06':
         fields['pu_lon'] = ''
         fields['pu_lat'] = ''
         fields['do_lon'] = ''
@@ -163,8 +163,8 @@ def __init_fhv(period):
         fields['fare'] = ''
         fields['tip'] = ''
 
-    # 2017-07 - 2018-04
-    if '2017-07' <= period <= '2018-04':
+    # 2017-07 - 2018-12
+    if '2017-07' <= period <= '2018-12':
         fields['pu_lon'] = ''
         fields['pu_lat'] = ''
         fields['do_lon'] = ''

@@ -13,17 +13,17 @@ def convert_df(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
 
     return taxi_df
 
-# Finds the maximum passenger in an aggregated DataFrame.
-def max_passengers(agg_df: DataFrame):
-    return agg_df.agg(max(agg_df[1])).collect()[0][0]
+# Finds the maximum passengers in an aggregated DataFrame.
+def max_passengers(agg_df: DataFrame) -> float:
+    return float(agg_df.agg(max(agg_df[1])).collect()[0][0])
 
-# Finds the maximum passenger in an aggregated DataFrame.
-def min_time(agg_df: DataFrame):
-    return agg_df.agg(min(agg_df[0])).collect()[0][0]
+# Finds the maximum time or date in an aggregated DataFrame.
+def min_time(agg_df: DataFrame) -> int:
+    return int(agg_df.agg(min(agg_df[0])).collect()[0][0])
 
-# Finds the maximum passenger in an aggregated DataFrame.
-def max_time(agg_df: DataFrame):
-    return agg_df.agg(max(agg_df[0])).collect()[0][0]
+# Finds the maximum time or date in an aggregated DataFrame.
+def max_time(agg_df: DataFrame) -> int:
+    return int(agg_df.agg(max(agg_df[0])).collect()[0][0])
 
 # Finds the average passenger amount per pick-up location.
 def passengers_per_pickup_area(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
@@ -40,6 +40,10 @@ def passengers_per_hour(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame
 # Finds the average passenger amount per day of the year.
 def passengers_per_day(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
     return taxi_df.groupBy(dayofyear(fields['do_time']).alias('day_of_year')).agg(avg(fields['passengers']))
+
+# Finds the average passenger amount per day of the week.
+def passengers_per_weekday(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
+    return taxi_df.groupBy(dayofweek(fields['do_time']).alias('day_of_week')).agg(avg(fields['passengers']))
 
 # Finds the average passenger amount per month of the year.
 def passengers_per_month(taxi_df: DataFrame, fields: Dict[str, str]) -> DataFrame:
