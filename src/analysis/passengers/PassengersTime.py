@@ -96,6 +96,8 @@ class PassengersTime:
                 passengers_time_df = Passengers.passengers_per_hour(df, fields)
             elif ts == TimeScale.DAY:
                 passengers_time_df = Passengers.passengers_per_day(df, fields)
+            elif ts == TimeScale.WEEKDAY:
+                passengers_time_df = Passengers.passengers_per_weekday(df, fields)
             elif ts == TimeScale.MONTH:
                 passengers_time_df = Passengers.passengers_per_month(df, fields)
             elif ts == TimeScale.YEAR:
@@ -104,6 +106,8 @@ class PassengersTime:
                 raise ValueError('Invalid time scale selected')
 
             passengers_time_df.write.csv(self.data_path, header=False)  # Save the results as a CSV file
+
+        passengers_time_df.show()
 
         # Compute the value limits
         max_passenger = Passengers.max_passengers(passengers_time_df)
