@@ -96,6 +96,8 @@ class TipsTime:
                 tips_time_df = Tips.tips_per_hour(df, fields)
             elif ts == TimeScale.DAY:
                 tips_time_df = Tips.tips_per_day(df, fields)
+            elif ts == TimeScale.WEEKDAY:
+                tips_time_df = Tips.tips_per_weekday(df, fields)
             elif ts == TimeScale.MONTH:
                 tips_time_df = Tips.tips_per_month(df, fields)
             elif ts == TimeScale.YEAR:
@@ -104,6 +106,8 @@ class TipsTime:
                 raise ValueError('Invalid time scale selected')
 
             tips_time_df.write.csv(self.data_path, header=False)  # Save the results as a CSV file
+
+        tips_time_df.show()
 
         # Compute the value limits
         max_tip = Tips.max_tip(tips_time_df)
