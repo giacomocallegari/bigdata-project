@@ -100,11 +100,11 @@ class FaresArrivals:
         if fields['pu_loc'] == '' and fields['do_loc'] == '':
             yellow_df = Fares.convert_df(yellow_df, fields)
         fares_do_area_df = Fares.fares_per_dropoff_area(yellow_df, fields)
-        max_fare = Fares.max_fares(fares_do_area_df, fields)
+        max_fare = Fares.max_fare(fares_do_area_df)
         if os.path.isdir(self.yellow_data_path):
             shutil.rmtree(self.yellow_data_path)
         fares_do_area_df.write.csv(self.yellow_data_path, header=False)
-        self.yellow_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.yellow_data_path, 0, max_fare, "Yellow Taxi Fares - Departure Zone")
+        self.yellow_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.yellow_data_path, 0, max_fare, "Yellow Taxi Fares - Arrival Zone")
 
     # Analyzes data of type green.
     def compute_green(self):
@@ -113,11 +113,11 @@ class FaresArrivals:
         if fields['pu_loc'] == '' and fields['do_loc'] == '':
             green_df = Fares.convert_df(green_df, fields)
         fares_do_area_df = Fares.fares_per_dropoff_area(green_df, fields)
-        max_fare = Fares.max_fares(fares_do_area_df, fields)
+        max_fare = Fares.max_fare(fares_do_area_df)
         if os.path.isdir(self.green_data_path):
             shutil.rmtree(self.green_data_path)
         fares_do_area_df.write.csv(self.green_data_path, header=False)
-        self.green_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.green_data_path, 0, max_fare, "Green Taxi Fares - Departure Zone")
+        self.green_chart = MapChart.MapChart(self.dbf_file, self.shp_file, self.green_data_path, 0, max_fare, "Green Taxi Fares - Arrival Zone")
 
 
 reader = DataReader.DataReader()  # Initialize the DataReader

@@ -100,7 +100,7 @@ class FaresDepartures:
         if fields['pu_loc'] == '' and fields['do_loc'] == '':
             yellow_df = Fares.convert_df(yellow_df, fields)
         fares_pu_area_df = Fares.fares_per_pickup_area(yellow_df, fields)
-        max_fare = Fares.max_fares(fares_pu_area_df, fields)
+        max_fare = Fares.max_fare(fares_pu_area_df)
         if os.path.isdir(self.yellow_data_path):
             shutil.rmtree(self.yellow_data_path)
         fares_pu_area_df.write.csv(self.yellow_data_path, header=False)
@@ -113,7 +113,7 @@ class FaresDepartures:
         if fields['pu_loc'] == '' and fields['do_loc'] == '':
             green_df = Fares.convert_df(green_df, fields)
         fares_pu_area_df = Fares.fares_per_pickup_area(green_df, fields)
-        max_fare = Fares.max_fares(fares_pu_area_df, fields)
+        max_fare = Fares.max_fare(fares_pu_area_df)
         if os.path.isdir(self.green_data_path):
             shutil.rmtree(self.green_data_path)
         fares_pu_area_df.write.csv(self.green_data_path, header=False)
