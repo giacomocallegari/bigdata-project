@@ -108,14 +108,14 @@ class DeparturesTime:
             else:
                 raise ValueError('Invalid time scale selected')
 
-            # Divide the counted value by a constant factor
-            departures_time_df = Departures.divide_count(departures_time_df, float(factor))
-            departures_time_df.show()
+            departures_time_df = Departures.divide_count(departures_time_df, float(factor)) # Divide the counted value by a constant factor
 
             departures_time_df.write.csv(self.data_path, header=False)  # Save the results as a CSV file
 
         if tt == TaxiType.YELLOW: factor_label = 'x 1m'
         elif tt == TaxiType.GREEN: factor_label = 'x 100k'
+
+        departures_time_df.show()
 
         # Compute the value limits
         max_departures = Departures.max_departures(departures_time_df)

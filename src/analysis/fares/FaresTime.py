@@ -96,6 +96,8 @@ class FaresTime:
                 fares_time_df = Fares.fares_per_hour(df, fields)
             elif ts == TimeScale.DAY:
                 fares_time_df = Fares.fares_per_day(df, fields)
+            elif ts == TimeScale.WEEKDAY:
+                fares_time_df = Fares.fares_per_weekday(df, fields)
             elif ts == TimeScale.MONTH:
                 fares_time_df = Fares.fares_per_month(df, fields)
             elif ts == TimeScale.YEAR:
@@ -104,6 +106,8 @@ class FaresTime:
                 raise ValueError('Invalid time scale selected')
 
             fares_time_df.write.csv(self.data_path, header=False)  # Save the results as a CSV file
+
+        fares_time_df.show()
 
         # Compute the value limits
         max_fare = Fares.max_fare(fares_time_df)
