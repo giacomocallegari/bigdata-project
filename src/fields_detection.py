@@ -22,6 +22,7 @@ def __init_yellow(period):
         fields['fare'] = 'Fare_Amt'
         fields['tip'] = 'Tip_Amt'
         fields['passengers'] = 'Passenger_Count'
+        fields['dist'] = 'Trip_Distance'
 
     # 2010-01 - 2013-12
     if '2010-01' <= period <= '2013-12':
@@ -36,6 +37,7 @@ def __init_yellow(period):
         fields['fare'] = 'fare_amount'
         fields['tip'] = 'tip_amount'
         fields['passengers'] = 'passenger_count'
+        fields['dist'] = 'trip_distance'
 
     # 2014-01 - 2014-12
     if '2014-01' <= period <= '2014-12':
@@ -50,6 +52,7 @@ def __init_yellow(period):
         fields['fare'] = 'fare_amount'
         fields['tip'] = 'tip_amount'
         fields['passengers'] = 'passenger_count'
+        fields['dist'] = 'trip_distance'
 
     # 2015-01 - 2016-06
     if '2015-01' <= period <= '2016-06':
@@ -64,6 +67,7 @@ def __init_yellow(period):
         fields['fare'] = 'fare_amount'
         fields['tip'] = 'tip_amount'
         fields['passengers'] = 'passenger_count'
+        fields['dist'] = 'trip_distance'
 
     # 2016-07 - 2018-12
     if '2016-07' <= period <= '2018-12':
@@ -78,6 +82,7 @@ def __init_yellow(period):
         fields['fare'] = 'fare_amount'
         fields['tip'] = 'tip_amount'
         fields['passengers'] = 'passenger_count'
+        fields['dist'] = 'trip_distance'
 
     return fields
 
@@ -100,6 +105,7 @@ def __init_green(period):
         fields['fare'] = 'Fare_amount'
         fields['tip'] = 'Tip_amount'
         fields['passengers'] = 'Passenger_count'
+        fields['dist'] = 'Trip_distance'
 
     # 2015-01 - 2016-06
     if '2015-01' <= period <= '2016-06':
@@ -114,6 +120,7 @@ def __init_green(period):
         fields['fare'] = 'Fare_amount'
         fields['tip'] = 'Tip_amount'
         fields['passengers'] = 'Passenger_count'
+        fields['dist'] = 'Trip_distance'
 
     # 2016-07 - 2018-12
     if '2016-07' <= period <= '2018-12':
@@ -128,6 +135,7 @@ def __init_green(period):
         fields['fare'] = 'fare_amount'
         fields['tip'] = 'tip_amount'
         fields['passengers'] = 'passenger_count'
+        fields['dist'] = 'trip_distance'
 
     return fields
 
