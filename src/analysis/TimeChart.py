@@ -57,6 +57,10 @@ class TimeChart:
             x_major_step = 50
             x_minor_step = 10
             xlabel = 'Day of the year (D)'
+        elif ts == TimeScale.WEEKDAY:  # Day of the week
+            x_major_step = 1
+            x_minor_step = 1
+            xlabel = 'Day of the week (D)'
         elif ts == TimeScale.MONTH:  # Month of the year
             x_major_step = 3
             x_minor_step = 1
