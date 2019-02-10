@@ -11,7 +11,7 @@ import math
 
 class DisplacementsMapChart:
     # Change this value to set the number of arrow visualized
-    displacement_number = -1
+    displacement_number = 100
 
     def __init__(self, dbf_path = "", shp_path = "", folder_income_path="", folder_outcome_path="", title=""):
         self.title = title
@@ -48,8 +48,8 @@ class DisplacementsMapChart:
         for shape in shapefile_reader.shapeRecords():
             # Draw neighborhood
             poly_data = shape.shape.__geo_interface__
-            axes_in.add_patch(PolygonPatch(poly_data, fc="blue", ec="black", alpha=0.2, zorder=1))
-            axes_out.add_patch(PolygonPatch(poly_data, fc="blue", ec="black", alpha=0.2, zorder=1))
+            axes_in.add_patch(PolygonPatch(poly_data, fc="black", ec="white", alpha=0.6, zorder=1))
+            axes_out.add_patch(PolygonPatch(poly_data, fc="black", ec="white", alpha=0.6,  zorder=1))
             # Draw centroid for each neighborhood
             neighborhood_poly = geometry.Polygon(shape.shape.points)
             centroid_x, centroid_y = neighborhood_poly.centroid.coords[0]
@@ -69,7 +69,7 @@ class DisplacementsMapChart:
         self.displacement_number = len(incomes_records) + len(outcomes_records)
         print(max_income_num, " - ", max_outcome_num)
         norm = matplotlib.colors.Normalize(0, max(max_income_num, max_outcome_num))
-        cmap = plt.cm.OrRd
+        cmap = plt.cm.YlOrRd
         index = 0
         for outcome_record in reversed(outcomes_records):
             _, percentage = math.modf((index / self.displacement_number) * 100)
@@ -85,7 +85,7 @@ class DisplacementsMapChart:
                            center_out_to_y - center_out_from_y,
                            color=str(matplotlib.colors.rgb2hex(cmap(norm(out_count)))),
                            width=100,
-                           alpha=0.5,
+                           alpha=1,
                            length_includes_head=True)
 
         for income_record in reversed(incomes_records):
@@ -102,12 +102,12 @@ class DisplacementsMapChart:
                       center_in_to_y - center_in_from_y,
                       color=str(matplotlib.colors.rgb2hex(cmap(norm(in_count)))),
                       width=100,
-                      alpha=0.5,
+                      alpha=1,
                       length_includes_head=True)
         print("\rBuilding map - chart -> 100%", end="")
-        sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-        sm.set_array([])
-        figure.colorbar(sm)
+        # sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+        # sm.set_array([])
+        # figure.colorbar(sm)
         axes_in.axis('scaled')
         axes_out.axis('scaled')
         axes_in.axis("off")
